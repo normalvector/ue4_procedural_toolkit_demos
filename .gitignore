@@ -361,4 +361,9 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
 ## Custom files
+
+# UE4 Plugin stuff
+**/Binaries/
+**/Intermediate/

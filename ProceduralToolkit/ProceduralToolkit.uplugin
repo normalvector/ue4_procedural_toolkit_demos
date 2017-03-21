@@ -1,0 +1,25 @@
+{
+	"FileVersion" : 3,
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"FriendlyName" : "Procedural Toolkit",
+	"Description" : "A toolkit for creating procedural content quickly.",
+	"Category" : "Runtime",
+	"CreatedBy" : "normalvector",
+	"CreatedByURL" : "http://normalvector.com",
+	"DocsURL" : "",
+	"MarketplaceURL" : "",
+	"SupportURL" : "",
+	"EnabledByDefault" : true,
+	"CanContainContent" : false,
+	"IsBetaVersion" : false,
+	"Installed" : false,
+	"Modules" :
+	[
+		{
+			"Name" : "ProceduralToolkit",
+			"Type" : "Developer",
+			"LoadingPhase" : "Default"
+		}
+	]
+}
