@@ -2,7 +2,7 @@
 
 #pragma once
 
-//#include "ProceduralMeshComponent.h"	// Needed for FProcMeshTangent
+#include "ProceduralMeshComponent.h"	// Needed for FProcMeshTangent
 #include "FSectionGeometry.generated.h"
 
 USTRUCT(BlueprintType)
@@ -18,8 +18,8 @@ struct FSectionGeometry {
 		TArray<FVector> normals;
 	UPROPERTY(BlueprintReadWrite)
 		TArray<FVector2D> uvs;
-	//UPROPERTY(BlueprintReadWrite)
-	//	TArray<FProcMeshTangent> tangents;
+	UPROPERTY(BlueprintReadWrite)
+		TArray<FProcMeshTangent> tangents;
 	UPROPERTY(BlueprintReadWrite)
 		TArray<FLinearColor> vertexColors;
 
@@ -29,7 +29,7 @@ struct FSectionGeometry {
 		triangles = TArray<int32>();
 		normals = TArray<FVector>();
 		uvs = TArray<FVector2D>();
-		//tangents = TArray<FProcMeshTangent>();
+		tangents = TArray<FProcMeshTangent>();
 		vertexColors = TArray<FLinearColor>();
 	}
 };

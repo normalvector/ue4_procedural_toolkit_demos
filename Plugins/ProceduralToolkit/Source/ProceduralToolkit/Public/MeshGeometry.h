@@ -10,9 +10,10 @@ UCLASS(BlueprintType)
 class PROCEDURALTOOLKIT_API UMeshGeometry : public UObject
 {
 	GENERATED_BODY()
-
+		
+public:
 	// The actual data making up this mesh
-	UPROPERTY()
+	UPROPERTY(BlueprintReadonly)
 		TArray<FSectionGeometry> sections;
 
 	// Default constructor- creates an empty mesh.
