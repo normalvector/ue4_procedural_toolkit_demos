@@ -3,6 +3,7 @@
 #include "ProceduralToolkit.h"
 #include "Engine/StaticMesh.h"
 #include "KismetProceduralMeshLibrary.h"
+#include "SelectionSet.h"
 #include "MeshGeometry.h"
 
 UMeshGeometry::UMeshGeometry()
@@ -96,6 +97,14 @@ int32 UMeshGeometry::TotalTriangleCount() const
 FString UMeshGeometry::GetSummary() const
 {
 	return FString::Printf(TEXT("%d sections, %d vertices, %d triangles"), this->sections.Num(), this->TotalVertexCount(), this->TotalTriangleCount());
+}
+
+USelectionSet *UMeshGeometry::SelectAll()
+{
+	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
+	newSelectionSet->CreateSelectionSet(this->TotalVertexCount());
+	newSelectionSet->SetAllWeights(1.0f);
+	return newSelectionSet;
 }
 
 void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max)

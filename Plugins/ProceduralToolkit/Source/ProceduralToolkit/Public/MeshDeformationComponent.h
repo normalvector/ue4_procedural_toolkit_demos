@@ -29,6 +29,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		bool UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
 
+	///// Selection Set utilities
+
+	// Select all vertices
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectAll();
+
 	///// Deformation utilities
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Jitter(FRandomStream randomStream, FVector min, FVector max);

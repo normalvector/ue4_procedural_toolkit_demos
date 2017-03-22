@@ -34,6 +34,16 @@ bool UMeshDeformationComponent::UpdateProceduralMeshComponent(UProceduralMeshCom
 	return meshGeometry->UpdateProceduralMeshComponent(proceduralMeshComponent, createCollision);
 }
 
+USelectionSet * UMeshDeformationComponent::SelectAll()
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("UMeshDeformationComponent: No meshGeometry loaded"));
+		return nullptr;
+	}
+
+	return meshGeometry->SelectAll();
+}
+
 void UMeshDeformationComponent::Jitter(FRandomStream randomStream, FVector min, FVector max)
 {
 	if (!meshGeometry) {
