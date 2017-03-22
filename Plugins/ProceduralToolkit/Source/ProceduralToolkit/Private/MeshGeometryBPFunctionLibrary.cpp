@@ -5,10 +5,15 @@
 #include "MeshGeometryBPFunctionLibrary.h"
 
 
-UMeshGeometry *UMeshGeometryBPFunctionLibrary::GetMeshGeometryFromStaticMesh(UObject *owner, UStaticMesh *staticMesh, int32 LOD/*=0*/)
+UMeshGeometry *UMeshGeometryBPFunctionLibrary::GetMeshGeometryFromStaticMesh(UStaticMesh *staticMesh, int32 LOD/*=0*/)
 {
+	// If there's no mesh provided we don't have any work to do.
+	if (!staticMesh) {
+		return nullptr;
+	}
+
 	// Create a MeshGeometry with a transient package as Outer - not providing it will make it instantly GC.
-	UMeshGeometry *meshGeometry = NewObject<UMeshGeometry>(owner, UMeshGeometry::StaticClass());
+	UMeshGeometry *meshGeometry = NewObject<UMeshGeometry>(staticMesh, UMeshGeometry::StaticClass());
 	
 	const int32 numSections = staticMesh->GetNumSections(LOD);
 	UE_LOG(LogTemp, Log, TEXT("Found %d sections for LOD %d"), numSections, LOD);
@@ -37,7 +42,6 @@ UMeshGeometry *UMeshGeometryBPFunctionLibrary::GetMeshGeometryFromStaticMesh(UOb
 
 	// Return the MeshGeometry.
 	return meshGeometry;
-
 }
 
 void UMeshGeometryBPFunctionLibrary::RebuildProceduralMeshComponentWithMeshGeometry(UProceduralMeshComponent *proceduralMeshComponent, UMeshGeometry *meshGeometry, bool createCollision/*=false*/)
@@ -80,4 +84,43 @@ void UMeshGeometryBPFunctionLibrary::RebuildProceduralMeshComponentWithMeshGeome
 			section.vertexColors, section.tangents, createCollision
 		);
 	}
+}
+
+UMeshGeometry * UMeshGeometryBPFunctionLibrary::JitterMeshGeometry(
+	UMeshGeometry *meshGeometry, FRandomStream randomStream,
+	float minX /*= 0*/, float minY /*= 0*/, float minZ /*= 0*/, float maxX /*= 0*/, float maxY /*= 0*/, float maxZ /*= 0*/)
+{
+	// If there's no mesh provided we don't have any work to do.
+	if (!meshGeometry) {
+		return meshGeometry;
+	}
+
+	// Iterate over the sections randomly jittering each vertex in the section
+	FVector jitter;
+	auto newVerts = TArray<FVector>();
+	for (auto section : meshGeometry->sections) {
+		UE_LOG(LogTemp, Log, TEXT("Jittering section: %d verts (X SHRINK)"), section.vertices.Num());
+		/*
+		for (int i = 0; i < section.vertices.Num(); ++i) {
+			jitter = FVector(
+				randomStream.FRandRange(minX, maxX),
+				randomStream.FRandRange(minY, maxY),
+				randomStream.FRandRange(minZ, maxZ)
+			);
+			//section.vertices[i] += jitter;
+			newVerts.Emplace(section.vertices[i] + jitter);
+			UE_LOG(LogTemp, Log, TEXT("Vertex: %f,%f,%f (%f, %f, %f)"), section.vertices[i].X, section.vertices[i].Y, section.vertices[i].Z, jitter.X, jitter.Y, jitter.Z);
+		}
+		section.vertices = newVerts;
+		*/
+		for (FVector &vertex : section.vertices) {
+			//vertex.X += randomStream.FRandRange(minX, maxX);
+			vertex.X *= 0.25;
+			vertex.Y += randomStream.FRandRange(minY, maxY);
+			vertex.Z += randomStream.FRandRange(minZ, maxZ);
+		}
+	}
+
+	// All done
+	return meshGeometry;
 }
