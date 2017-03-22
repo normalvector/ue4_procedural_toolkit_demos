@@ -16,16 +16,20 @@ UMeshDeformationComponent::UMeshDeformationComponent()
 
 bool UMeshDeformationComponent::LoadFromStaticMesh(UStaticMesh *staticMesh, int32 LOD /*= 0*/)
 {
-	// If there's no static mesh we have nothing to do..
-	if (!staticMesh) {
-		UE_LOG(LogTemp, Warning, TEXT("LoadFromStaticMesh: No StaticMesh provided"));
+	meshGeometry = NewObject<UMeshGeometry>(this);
+	bool success = meshGeometry->LoadFromStaticMesh(staticMesh);
+	if (!success) {
 		meshGeometry = nullptr;
+	}
+	return success;
+}
+
+bool UMeshDeformationComponent::UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("UpdateProceduralMeshComponent: No meshGeometry loaded"));
 		return false;
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("Reading mesh geometry from static mesh '%s'"), *staticMesh->GetName());
-	meshGeometry = NewObject<UMeshGeometry>(this);
-	meshGeometry->LoadFromStaticMesh(staticMesh);
-
-	return true;
+	return meshGeometry->UpdateProceduralMeshComponent(proceduralMeshComponent, createCollision);
 }

@@ -4,6 +4,7 @@
 
 #include "UObject/NoExportTypes.h"
 #include "FSectionGeometry.h"
+#include "ProceduralMeshComponent.h"
 #include "MeshGeometry.generated.h"
 
 UCLASS(BlueprintType)
@@ -23,4 +24,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
 		bool LoadFromStaticMesh(UStaticMesh *staticMesh, int32 LOD = 0);
 	
+	// Write to a PMC
+	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
+		bool UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
 };

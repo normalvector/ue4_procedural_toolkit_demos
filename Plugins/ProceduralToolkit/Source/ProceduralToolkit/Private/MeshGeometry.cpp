@@ -14,10 +14,13 @@ UMeshGeometry::UMeshGeometry()
 
 bool UMeshGeometry::LoadFromStaticMesh(UStaticMesh *staticMesh, int32 LOD /*= 0*/)
 {
-	// If there's no mesh provided we don't have any work to do.
+	// If there's no static mesh we have nothing to do..
 	if (!staticMesh) {
+		UE_LOG(LogTemp, Warning, TEXT("LoadFromStaticMesh: No StaticMesh provided"));
 		return false;
 	}
+
+	UE_LOG(LogTemp, Log, TEXT("Reading mesh geometry from static mesh '%s'"), *staticMesh->GetName());
 
 	// Clear any existing geometry.
 	this->sections.Empty();
@@ -46,5 +49,29 @@ bool UMeshGeometry::LoadFromStaticMesh(UStaticMesh *staticMesh, int32 LOD /*= 0*
 	}
 
 	// All done
+	return true;
+}
+
+bool UMeshGeometry::UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision)
+{
+	// If there's no PMC we have nothing to do..
+	if (!proceduralMeshComponent) {
+		UE_LOG(LogTemp, Warning, TEXT("UpdateProceduralMeshComponent: No proceduralMeshComponent provided"));
+		return false;
+	}
+
+	// Clear the geometry
+	proceduralMeshComponent->ClearAllMeshSections();
+
+	// Iterate over the mesh sections, creating a PMC MeshSection for each one.
+	int32 nextSectionIndex = 0;
+	for (auto section : this->sections) {
+		UE_LOG(LogTemp, Log, TEXT("Rebuilding section.."));
+		// Create the PMC section with the StaticMesh's data.
+		proceduralMeshComponent->CreateMeshSection_LinearColor(
+			nextSectionIndex++, section.vertices, section.triangles, section.normals, section.uvs,
+			section.vertexColors, section.tangents, createCollision
+		);
+	}
 	return true;
 }

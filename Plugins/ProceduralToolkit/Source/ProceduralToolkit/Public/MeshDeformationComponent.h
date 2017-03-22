@@ -24,5 +24,8 @@ public:
 	// Pull out the geometry of the mesh so we're able to modify it
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		bool LoadFromStaticMesh(UStaticMesh *staticMesh, int32 LOD = 0);
-	
+
+	// Write out the geometry to a ProceduralMeshComponent.
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		bool UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
 };
