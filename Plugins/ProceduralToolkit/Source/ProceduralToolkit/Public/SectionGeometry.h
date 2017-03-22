@@ -3,7 +3,7 @@
 #pragma once
 
 #include "ProceduralMeshComponent.h"	// Needed for FProcMeshTangent
-#include "FSectionGeometry.generated.h"
+#include "SectionGeometry.generated.h"
 
 USTRUCT(BlueprintType)
 struct FSectionGeometry {

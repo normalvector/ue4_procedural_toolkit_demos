@@ -3,7 +3,7 @@
 #pragma once
 
 #include "UObject/NoExportTypes.h"
-#include "FSectionGeometry.h"
+#include "SectionGeometry.h"
 #include "ProceduralMeshComponent.h"
 #include "MeshGeometry.generated.h"
 
@@ -27,6 +27,18 @@ public:
 	// Write to a PMC
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
 		bool UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
+
+	// Return the number of total vertices in the geometry.
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		int32 TotalVertexCount() const;
+
+	// Return the number of total triangles in the geometry.
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		int32 TotalTriangleCount() const;
+
+	// Get a textual representation of this geometry (Summarises vert count and so on)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		FString GetSummary() const;
 
 	///// Deformation utilities
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)

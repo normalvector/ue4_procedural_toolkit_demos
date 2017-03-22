@@ -1,10 +1,9 @@
 // (c)2017 Paul Golds, released under MIT License.
 
 #include "ProceduralToolkit.h"
+#include "Engine/StaticMesh.h"
+#include "KismetProceduralMeshLibrary.h"
 #include "MeshGeometry.h"
-
-
-
 
 UMeshGeometry::UMeshGeometry()
 {
@@ -74,6 +73,29 @@ bool UMeshGeometry::UpdateProceduralMeshComponent(UProceduralMeshComponent *proc
 		);
 	}
 	return true;
+}
+
+int32 UMeshGeometry::TotalVertexCount() const
+{
+	int32 totalVertexCount = 0;
+	for (auto section : this->sections) {
+		totalVertexCount += section.vertices.Num();
+	}
+	return totalVertexCount;
+}
+
+int32 UMeshGeometry::TotalTriangleCount() const
+{
+	int32 totalTriangleCount = 0;
+	for (auto section : this->sections) {
+		totalTriangleCount += section.triangles.Num();
+	}
+	return totalTriangleCount / 3; // 3pts per triangle
+}
+
+FString UMeshGeometry::GetSummary() const
+{
+	return FString::Printf(TEXT("%d sections, %d vertices, %d triangles"), this->sections.Num(), this->TotalVertexCount(), this->TotalTriangleCount());
 }
 
 void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max)
