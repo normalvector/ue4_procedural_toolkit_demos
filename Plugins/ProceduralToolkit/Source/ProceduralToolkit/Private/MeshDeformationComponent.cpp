@@ -14,7 +14,6 @@ UMeshDeformationComponent::UMeshDeformationComponent()
 	// ...
 }
 
-
 bool UMeshDeformationComponent::LoadFromStaticMesh(UStaticMesh *staticMesh, int32 LOD /*= 0*/)
 {
 	// If there's no static mesh we have nothing to do..
@@ -25,7 +24,8 @@ bool UMeshDeformationComponent::LoadFromStaticMesh(UStaticMesh *staticMesh, int3
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("Reading mesh geometry from static mesh '%s'"), *staticMesh->GetName());
-	meshGeometry = nullptr;
+	meshGeometry = NewObject<UMeshGeometry>(this);
+	meshGeometry->LoadFromStaticMesh(staticMesh);
 
-	return false;
+	return true;
 }

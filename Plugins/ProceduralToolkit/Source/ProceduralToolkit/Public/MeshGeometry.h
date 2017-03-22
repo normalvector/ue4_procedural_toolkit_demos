@@ -18,5 +18,9 @@ public:
 
 	// Default constructor- creates an empty mesh.
 	UMeshGeometry();
+
+	// Read data from a StaticMesh
+	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
+		bool LoadFromStaticMesh(UStaticMesh *staticMesh, int32 LOD = 0);
 	
 };
