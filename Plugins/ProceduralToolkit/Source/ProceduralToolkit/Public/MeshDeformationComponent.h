@@ -31,5 +31,5 @@ public:
 
 	///// Deformation utilities
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Jitter(FRandomStream randomStream, float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
+		void Jitter(FRandomStream randomStream, FVector min, FVector max);
 };
