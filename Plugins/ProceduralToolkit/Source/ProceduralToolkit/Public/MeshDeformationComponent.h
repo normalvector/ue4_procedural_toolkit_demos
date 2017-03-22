@@ -28,4 +28,8 @@ public:
 	// Write out the geometry to a ProceduralMeshComponent.
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		bool UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
+
+	///// Deformation utilities
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void Jitter(FRandomStream randomStream, float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
 };

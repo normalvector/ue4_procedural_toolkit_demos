@@ -75,3 +75,15 @@ bool UMeshGeometry::UpdateProceduralMeshComponent(UProceduralMeshComponent *proc
 	}
 	return true;
 }
+
+void UMeshGeometry::Jitter(FRandomStream randomStream, float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
+{
+	// Iterate over the sections, and the the vertices in the sections.
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			vertex.X += randomStream.FRandRange(minX, maxX);
+			vertex.Y += randomStream.FRandRange(minY, maxY);
+			vertex.Z += randomStream.FRandRange(minZ, maxZ);
+		}
+	}
+}

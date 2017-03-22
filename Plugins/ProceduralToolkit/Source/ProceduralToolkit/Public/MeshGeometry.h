@@ -27,4 +27,8 @@ public:
 	// Write to a PMC
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
 		bool UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
+
+	///// Deformation utilities
+	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
+		void Jitter(FRandomStream randomStream, float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
 };

@@ -33,3 +33,12 @@ bool UMeshDeformationComponent::UpdateProceduralMeshComponent(UProceduralMeshCom
 
 	return meshGeometry->UpdateProceduralMeshComponent(proceduralMeshComponent, createCollision);
 }
+
+void UMeshDeformationComponent::Jitter(FRandomStream randomStream, float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("UMeshDeformationComponent: No meshGeometry loaded"));
+		return;
+	}
+	meshGeometry->Jitter(randomStream, minX, minY, minZ, maxX, maxY, maxZ);
+}
