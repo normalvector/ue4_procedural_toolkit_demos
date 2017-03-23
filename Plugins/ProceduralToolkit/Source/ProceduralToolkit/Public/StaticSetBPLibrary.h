@@ -89,7 +89,7 @@ public:
 			Keywords = "/ divide division", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Divide_SelctionSetByFloat(USelectionSet *Value, float Float = 1);
-/*
+
 	// OneMinus
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "OneMinus (SelectionSet)", Category = "Math|SelectionSet", Keywords="oneminus minus - negate")
@@ -107,7 +107,7 @@ public:
 		meta = (DisplayName = "Randomize (SelectionSet)", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Randomize(USelectionSet *Value, FRandomStream RandomStream, float Min=0, float Max=1);
-	
+/*	
 	// Max
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "Max (SelectionSet, SelectionSet)", Category = "Math|SelectionSet")

@@ -249,60 +249,60 @@ USelectionSet * UStaticSetBPLibrary::Divide_SelctionSetByFloat(USelectionSet *Va
 	return result;
 }
 
-//USelectionSet * UStaticSetBPLibrary::OneMinus(USelectionSet *Value)
-//{
-//	// Need a SelectionSet
-//	if (!Value) {
-//		return nullptr;
-//	}
-//
-//	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
-//	auto size = Value->weights.Num();
-//	result->weights.SetNumZeroed(size);
-//
-//	for (int32 i = 0; i < size; i++) {
-//		result->weights[i] = 1.0f - Value->weights[i];
-//	}
-//
-//	return result;
-//}
-//
-//USelectionSet * UStaticSetBPLibrary::Set(USelectionSet *Value, float Float/*=0*/)
-//{
-//	// Need a SelectionSet
-//	if (!Value) {
-//		return nullptr;
-//	}
-//
-//	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
-//	auto size = Value->weights.Num();
-//	result->weights.SetNumZeroed(size);
-//
-//	for (int32 i = 0; i < size; i++) {
-//		result->weights[i] = Float;
-//	}
-//
-//	return result;
-//}
-//
-//USelectionSet * UStaticSetBPLibrary::Randomize(USelectionSet *Value, FRandomStream RandomStream, float Min/*=0*/, float Max/*=1*/)
-//{
-//	// Need a SelectionSet
-//	if (!Value) {
-//		return nullptr;
-//	}
-//
-//	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
-//	auto size = Value->weights.Num();
-//	result->weights.SetNumZeroed(size);
-//
-//	for (int32 i = 0; i < size; i++) {
-//		result->weights[i] = RandomStream.FRandRange(Min, Max);
-//	}
-//
-//	return result;
-//}
-//
+USelectionSet * UStaticSetBPLibrary::OneMinus(USelectionSet *Value)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = 1.0f - Value->weights[i];
+	}
+
+	return result;
+}
+
+USelectionSet * UStaticSetBPLibrary::Set(USelectionSet *Value, float Float/*=0*/)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = Float;
+	}
+
+	return result;
+}
+
+USelectionSet * UStaticSetBPLibrary::Randomize(USelectionSet *Value, FRandomStream RandomStream, float Min/*=0*/, float Max/*=1*/)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = RandomStream.FRandRange(Min, Max);
+	}
+
+	return result;
+}
+
 //USelectionSet * UStaticSetBPLibrary::Max_SelectionSets(USelectionSet *A, USelectionSet *B)
 //{
 //	// Need both provided
