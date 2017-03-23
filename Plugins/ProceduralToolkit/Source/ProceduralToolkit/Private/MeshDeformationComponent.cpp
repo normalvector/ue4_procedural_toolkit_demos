@@ -53,11 +53,11 @@ void UMeshDeformationComponent::Jitter(FRandomStream randomStream, FVector min, 
 	meshGeometry->Jitter(randomStream, min, max);
 }
 
-void UMeshDeformationComponent::Translate(FVector delta)
+void UMeshDeformationComponent::Translate(FVector delta, USelectionSet *selection)
 {
 	if (!meshGeometry) {
 		UE_LOG(LogTemp, Warning, TEXT("Translate: No meshGeometry loaded"));
 		return;
 	}
-	meshGeometry->Translate(delta);
+	meshGeometry->Translate(delta, selection);
 }

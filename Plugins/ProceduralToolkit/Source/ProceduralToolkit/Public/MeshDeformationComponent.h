@@ -41,5 +41,5 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Translate(FVector delta);
+		void Translate(FVector delta, USelectionSet *selection);
 };

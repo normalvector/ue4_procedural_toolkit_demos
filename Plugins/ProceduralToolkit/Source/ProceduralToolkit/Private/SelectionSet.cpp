@@ -10,24 +10,27 @@ void USelectionSet::CreateSelectionSet(int32 size)
 	weights.AddZeroed(size);
 }
 
-void USelectionSet::SetAllWeights(float weight)
+USelectionSet *USelectionSet::SetAllWeights(float weight)
 {
 	for (auto &weightItr : weights) {
 		weightItr = weight;
 	}
+	return this;
 }
 
-void USelectionSet::RandomizeWeights(FRandomStream randomStream, float min /*= 0*/, float max /*= 0*/)
+USelectionSet *USelectionSet::RandomizeWeights(FRandomStream randomStream, float min /*= 0*/, float max /*= 1*/)
 {
 	for (auto &weight : weights) {
 		weight = randomStream.FRandRange(min, max);
 	}
+	return this;
 }
 
-void USelectionSet::Clamp(float min /*= 0*/, float max /*= 1*/)
+USelectionSet *USelectionSet::Clamp(float min /*= 0*/, float max /*= 1*/)
 {
 	for (auto &weight : weights) {
 		weight = FMath::Clamp(weight, min, max);
 	}
+	return this;
 }
 

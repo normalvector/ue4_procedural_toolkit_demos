@@ -55,5 +55,5 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
-		void Translate(FVector delta);
+		void Translate(FVector delta, USelectionSet *selection);
 };

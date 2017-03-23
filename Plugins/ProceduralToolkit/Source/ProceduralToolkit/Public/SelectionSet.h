@@ -23,13 +23,13 @@ public:
 
 	// Set all values to same value
 	UFUNCTION(BlueprintCallable, Category = SelectionSet)
-		void SetAllWeights(float weight);
+		USelectionSet *SetAllWeights(float weight);
 
 	// Randomize the weights of the selection set
 	UFUNCTION(BlueprintCallable, Category = SelectionSet)
-		void RandomizeWeights(FRandomStream randomStream, float minWeight = 0, float maxWeight = 0);
+		USelectionSet *RandomizeWeights(FRandomStream randomStream, float minWeight = 0, float maxWeight = 1);
 
 	// Clamp the weights
 	UFUNCTION(BlueprintCallable, Category = SelectionSet)
-		void Clamp(float min = 0, float max = 1);
+		USelectionSet *Clamp(float min = 0, float max = 1);
 };

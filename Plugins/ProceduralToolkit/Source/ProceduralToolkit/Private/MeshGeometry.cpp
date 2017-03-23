@@ -119,12 +119,27 @@ void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max)
 	}
 }
 
-void UMeshGeometry::Translate(FVector delta)
+void UMeshGeometry::Translate(FVector delta, USelectionSet *selection)
 {
-	// Iterate over the sections, and the the vertices in the sections.
-	for (auto &section : this->sections) {
-		for (auto &vertex : section.vertices) {
-			vertex += delta;
+	// TODO: Check selectionSet size.
+
+	// Check if there's any need to apply weights
+	if (selection) {
+		// Iterate over the sections, and the the vertices in the sections.
+		int32 nextSelectionIndex = 0;
+		for (auto &section : this->sections) {
+			for (auto &vertex : section.vertices) {
+				vertex = FMath::Lerp(vertex, vertex + delta, selection->weights[nextSelectionIndex++]);
+			}
 		}
+	}
+	else {
+		// Iterate over the sections, and the the vertices in the sections.
+		for (auto &section : this->sections) {
+			for (auto &vertex : section.vertices) {
+				vertex += delta;
+			}
+		}
+	
 	}
 }
