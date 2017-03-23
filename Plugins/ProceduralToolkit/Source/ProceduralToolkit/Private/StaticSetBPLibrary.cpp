@@ -124,42 +124,42 @@ USelectionSet * UStaticSetBPLibrary::Subtract_SelectionSets(USelectionSet *A, US
 	return result;
 }
 
-//USelectionSet * UStaticSetBPLibrary::Add_FloatToSelectionSet(USelectionSet *Value, float Float/*=0*/)
-//{
-//	// Need a SelectionSet
-//	if (!Value) {
-//		return nullptr;
-//	}
-//
-//	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
-//	auto size = Value->weights.Num();
-//	result->weights.SetNumZeroed(size);
-//
-//	for (int32 i = 0; i < size; i++) {
-//		result->weights[i] = Value->weights[i] + Float;
-//	}
-//
-//	return result;
-//}
-//
-//USelectionSet * UStaticSetBPLibrary::Subtract_FloatFromSelectionSet(USelectionSet *Value, float Float/*=0*/)
-//{
-//	// Need a SelectionSet
-//	if (!Value) {
-//		return nullptr;
-//	}
-//
-//	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
-//	auto size = Value->weights.Num();
-//	result->weights.SetNumZeroed(size);
-//
-//	for (int32 i = 0; i < size; i++) {
-//		result->weights[i] = Value->weights[i] - Float;
-//	}
-//
-//	return result;
-//}
-//
+USelectionSet * UStaticSetBPLibrary::Add_FloatToSelectionSet(USelectionSet *Value, float Float/*=0*/)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = Value->weights[i] + Float;
+	}
+
+	return result;
+}
+
+USelectionSet * UStaticSetBPLibrary::Subtract_FloatFromSelectionSet(USelectionSet *Value, float Float/*=0*/)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = Value->weights[i] - Float;
+	}
+
+	return result;
+}
+
 //USelectionSet * UStaticSetBPLibrary::Subtract_SelectionSetFromFloat(float Float, USelectionSet *Value)
 //{
 //	// Need a SelectionSet

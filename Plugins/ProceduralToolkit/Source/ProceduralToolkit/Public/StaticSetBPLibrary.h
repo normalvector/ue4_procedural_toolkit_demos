@@ -40,7 +40,7 @@ public:
 			Keywords = "+ add plus", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Subtract_SelectionSets(USelectionSet *A, USelectionSet *B);
-/*
+
 	// SelectionSet + Float
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "SelectionSet + Float", CompactNodeTitle = "+",
@@ -50,11 +50,11 @@ public:
 
 	// SelectionSet - float
 	UFUNCTION(BlueprintPure,
-		meta = (DisplayName = "SelectionSet - Float", CompactNodeTitle = "+",
-			Keywords = "+ add plus", Category = "Math|SelectionSet")
+		meta = (DisplayName = "SelectionSet - Float", CompactNodeTitle = "-",
+			Keywords = "- subtract minus", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Subtract_FloatFromSelectionSet(USelectionSet *Value, float Float=0);
-
+/*
 	// Float - SelectionSet
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "Float - SelectionSet", CompactNodeTitle = "+",
