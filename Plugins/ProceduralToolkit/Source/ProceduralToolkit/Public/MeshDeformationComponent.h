@@ -38,4 +38,8 @@ public:
 	///// Deformation utilities
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Jitter(FRandomStream randomStream, FVector min, FVector max);
+
+
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void Translate(FVector delta);
 };

@@ -109,12 +109,22 @@ USelectionSet *UMeshGeometry::SelectAll()
 
 void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max)
 {
-	// Iterate over the sections, and the the vertices in the sections.
+	// Iterate over the sections, and the vertices in each section.
 	for (auto &section : this->sections) {
 		for (auto &vertex : section.vertices) {
 			vertex.X += randomStream.FRandRange(min.X, max.X);
 			vertex.Y += randomStream.FRandRange(min.Y, max.Y);
 			vertex.Z += randomStream.FRandRange(min.Z, max.Z);
+		}
+	}
+}
+
+void UMeshGeometry::Translate(FVector delta)
+{
+	// Iterate over the sections, and the the vertices in the sections.
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			vertex += delta;
 		}
 	}
 }
