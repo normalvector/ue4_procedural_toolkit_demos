@@ -107,6 +107,29 @@ USelectionSet *UMeshGeometry::SelectAll()
 	return newSelectionSet;
 }
 
+USelectionSet * UMeshGeometry::SelectNear(FVector center /*=FVector::ZeroVector*/, float innerRadius/*=0*/, float outerRadius/*=100*/)
+{
+	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
+	//newSelectionSet->CreateSelectionSet(this->TotalVertexCount());
+
+	int32 nextVertexIndex = 0;
+	// Iterate over the sections, and the vertices in each section.
+	float distanceFromCenter;
+	float distanceBias;
+	float selectionRadius = outerRadius - innerRadius;
+
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			distanceFromCenter = (vertex - center).Size();
+			// Apply bias to map distance to 0-1 based on innerRadius and outerRadius
+			distanceBias = FMath::Clamp((distanceFromCenter - innerRadius) / selectionRadius, 0.0f, 1.0f);
+			newSelectionSet->weights.Emplace(distanceBias);
+		}
+	}
+
+	return newSelectionSet;
+}
+
 void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max)
 {
 	// Iterate over the sections, and the vertices in each section.

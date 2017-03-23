@@ -44,6 +44,16 @@ USelectionSet * UMeshDeformationComponent::SelectAll()
 	return meshGeometry->SelectAll();
 }
 
+USelectionSet * UMeshDeformationComponent::SelectNear(FVector center /*= FVector::ZeroVector*/, float innerRadius /*= 0*/, float outerRadius /*= 100*/)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("UMeshDeformationComponent: No meshGeometry loaded"));
+		return nullptr;
+	}
+
+	return meshGeometry->SelectNear(center, innerRadius, outerRadius);
+}
+
 void UMeshDeformationComponent::Jitter(FRandomStream randomStream, FVector min, FVector max)
 {
 	if (!meshGeometry) {

@@ -6,8 +6,13 @@
 
 void USelectionSet::CreateSelectionSet(int32 size)
 {
-	weights.Empty();
+	this->Empty();
 	weights.AddZeroed(size);
+}
+
+void USelectionSet::Empty()
+{
+	weights.Empty();
 }
 
 USelectionSet *USelectionSet::SetAllWeights(float weight)

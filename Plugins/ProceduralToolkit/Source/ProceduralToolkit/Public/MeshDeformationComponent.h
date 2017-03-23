@@ -35,10 +35,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectAll();
 
+	// Select points near a point in space.
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectNear(FVector center = FVector::ZeroVector, float innerRadius = 0, float outerRadius = 100);
+
 	///// Deformation utilities
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Jitter(FRandomStream randomStream, FVector min, FVector max);
-
 
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Translate(FVector delta, USelectionSet *selection);

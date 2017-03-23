@@ -47,6 +47,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectAll();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectNear(FVector center =FVector::ZeroVector, float innerRadius=0, float outerRadius=100);
+
 	///// Deformation utilities
 	
 	// Randomly jitter a point.

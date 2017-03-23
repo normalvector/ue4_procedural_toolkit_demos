@@ -21,6 +21,9 @@ public:
 	// Populates the set with the supplied number weights 
 	void CreateSelectionSet(int32 size);
 
+	// Empties the set
+	void Empty();
+
 	// Set all values to same value
 	UFUNCTION(BlueprintCallable, Category = SelectionSet)
 		USelectionSet *SetAllWeights(float weight);
