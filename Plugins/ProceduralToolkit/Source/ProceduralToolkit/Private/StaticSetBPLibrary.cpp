@@ -6,6 +6,24 @@
 
 
 
+USelectionSet * UStaticSetBPLibrary::Clamp(USelectionSet *Value, float Min/*=0*/, float Max/*=1*/)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = FMath::Clamp(Value->weights[i], Min, Max);
+	}
+
+	return result;
+}
+
 USelectionSet *UStaticSetBPLibrary::Add_SelectionSets(USelectionSet *A, USelectionSet *B)
 {
 	// Need both provided

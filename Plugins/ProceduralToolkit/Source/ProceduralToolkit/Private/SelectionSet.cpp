@@ -32,14 +32,6 @@ USelectionSet *USelectionSet::RandomizeWeights(FRandomStream randomStream, float
 	return this;
 }
 
-USelectionSet *USelectionSet::Clamp(float min /*= 0*/, float max /*= 1*/)
-{
-	for (auto &weight : weights) {
-		weight = FMath::Clamp(weight, min, max);
-	}
-	return this;
-}
-
 USelectionSet *USelectionSet::Ease(EEasingFunc::Type easeFunction /*=Linear*/, int32 steps /*=2*/, float blendExp /*=2.0*/)
 {
 	// TODO: This can be more efficient using lambdas.

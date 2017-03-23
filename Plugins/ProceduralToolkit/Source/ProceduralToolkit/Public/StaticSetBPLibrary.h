@@ -15,8 +15,14 @@ class PROCEDURALTOOLKIT_API UStaticSetBPLibrary : public UBlueprintFunctionLibra
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintPure, Category = "StaticSet",
-		meta = (DisplayName = "SelectionSet + SelectionSet", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true")
+	UFUNCTION(BlueprintPure, 
+		meta = (DisplayName = "Clamp (SelectionSet)", Category = "Math|SelectionSet")
+	)
+		static USelectionSet *Clamp(USelectionSet *Value, float Min=0, float Max=1);
+
+	UFUNCTION(BlueprintPure,
+		meta = (DisplayName = "SelectionSet + SelectionSet", CompactNodeTitle = "+",
+		Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Add_SelectionSets(USelectionSet *A, USelectionSet *B);
 	
