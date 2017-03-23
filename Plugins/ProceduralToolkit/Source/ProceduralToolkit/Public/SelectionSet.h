@@ -3,6 +3,7 @@
 #pragma once
 
 #include "UObject/NoExportTypes.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "SelectionSet.generated.h"
 
 /**
@@ -35,4 +36,8 @@ public:
 	// Clamp the weights
 	UFUNCTION(BlueprintCallable, Category = SelectionSet)
 		USelectionSet *Clamp(float min = 0, float max = 1);
+
+	// Apply an easing function
+	UFUNCTION(BlueprintCallable, Category = SelectionSet)
+		USelectionSet *Ease(EEasingFunc::Type easeFunction = EEasingFunc::Linear, int32 steps = 2, float blendExp = 2.0f);
 };
