@@ -54,7 +54,7 @@ public:
 			Keywords = "- subtract minus", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Subtract_FloatFromSelectionSet(USelectionSet *Value, float Float=0);
-/*
+
 	// Float - SelectionSet
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "Float - SelectionSet", CompactNodeTitle = "+",
@@ -89,7 +89,7 @@ public:
 			Keywords = "/ divide division", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Divide_SelctionSetByFloat(USelectionSet *Value, float Float = 1);
-
+/*
 	// OneMinus
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "OneMinus (SelectionSet)", Category = "Math|SelectionSet", Keywords="oneminus minus - negate")
