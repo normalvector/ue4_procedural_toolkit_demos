@@ -32,8 +32,4 @@ public:
 	// Randomize the weights of the selection set
 	UFUNCTION(BlueprintCallable, Category = SelectionSet)
 		USelectionSet *RandomizeWeights(FRandomStream randomStream, float minWeight = 0, float maxWeight = 1);
-
-	// Apply an easing function
-	UFUNCTION(BlueprintCallable, Category = SelectionSet)
-		USelectionSet *Ease(EEasingFunc::Type easeFunction = EEasingFunc::Linear, int32 steps = 2, float blendExp = 2.0f);
 };
