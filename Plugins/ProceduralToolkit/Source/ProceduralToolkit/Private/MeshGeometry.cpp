@@ -122,7 +122,7 @@ USelectionSet * UMeshGeometry::SelectNear(FVector center /*=FVector::ZeroVector*
 		for (auto &vertex : section.vertices) {
 			distanceFromCenter = (vertex - center).Size();
 			// Apply bias to map distance to 0-1 based on innerRadius and outerRadius
-			distanceBias = FMath::Clamp((distanceFromCenter - innerRadius) / selectionRadius, 0.0f, 1.0f);
+			distanceBias = 1.0f - FMath::Clamp((distanceFromCenter - innerRadius) / selectionRadius, 0.0f, 1.0f);
 			newSelectionSet->weights.Emplace(distanceBias);
 		}
 	}
