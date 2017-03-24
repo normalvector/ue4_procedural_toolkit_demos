@@ -54,7 +54,7 @@ public:
 	
 	// Randomly jitter a point.
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
-		void Jitter(FRandomStream randomStream, FVector min, FVector max);
+		void Jitter(FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection=nullptr);
 
 
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)

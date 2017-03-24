@@ -130,16 +130,36 @@ USelectionSet * UMeshGeometry::SelectNear(FVector center /*=FVector::ZeroVector*
 	return newSelectionSet;
 }
 
-void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max)
+void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection /*=nullptr*/)
 {
-	// Iterate over the sections, and the vertices in each section.
-	for (auto &section : this->sections) {
-		for (auto &vertex : section.vertices) {
-			vertex.X += randomStream.FRandRange(min.X, max.X);
-			vertex.Y += randomStream.FRandRange(min.Y, max.Y);
-			vertex.Z += randomStream.FRandRange(min.Z, max.Z);
+	// TODO: Check selectionSet size.
+
+	// Check if there's any need to apply weights
+	if (selection) {
+		// Iterate over the sections, and the the vertices in the sections.
+		int32 nextSelectionIndex = 0;
+		float weight;
+			// Iterate over the sections, and the vertices in each section.
+			for (auto &section : this->sections) {
+				for (auto &vertex : section.vertices) {
+					weight = selection->weights[nextSelectionIndex++];
+					vertex.X += randomStream.FRandRange(min.X, max.X) * weight;
+					vertex.Y += randomStream.FRandRange(min.Y, max.Y) * weight;
+					vertex.Z += randomStream.FRandRange(min.Z, max.Z) * weight;
+				}
 		}
 	}
+	else {
+		// Iterate over the sections, and the vertices in each section.
+		for (auto &section : this->sections) {
+			for (auto &vertex : section.vertices) {
+				vertex.X += randomStream.FRandRange(min.X, max.X);
+				vertex.Y += randomStream.FRandRange(min.Y, max.Y);
+				vertex.Z += randomStream.FRandRange(min.Z, max.Z);
+			}
+		}
+	}
+
 }
 
 void UMeshGeometry::Translate(FVector delta, USelectionSet *selection)
