@@ -303,105 +303,115 @@ USelectionSet * UStaticSetBPLibrary::Randomize(USelectionSet *Value, FRandomStre
 	return result;
 }
 
-//USelectionSet * UStaticSetBPLibrary::Max_SelectionSets(USelectionSet *A, USelectionSet *B)
-//{
-//	// Need both provided
-//	if (!A || !B) {
-//		return nullptr;
-//	}
-//
-//	auto result = NewObject<USelectionSet>(A->GetOuter());
-//	int32 smallestSize = A->weights.Num() < B->weights.Num() ? A->weights.Num() : B->weights.Num();
-//	for (int32 i = 0; i < smallestSize; i++) {
-//		result->weights[i] = FMath::Max(A->weights[i], B->weights[i]);
-//	}
-//
-//	return result;
-//}
-//
-//USelectionSet * UStaticSetBPLibrary::Min_SelectionSets(USelectionSet *A, USelectionSet *B)
-//{
-//	// Need both provided
-//	if (!A || !B) {
-//		return nullptr;
-//	}
-//
-//	auto result = NewObject<USelectionSet>(A->GetOuter());
-//	int32 smallestSize = A->weights.Num() < B->weights.Num() ? A->weights.Num() : B->weights.Num();
-//	for (int32 i = 0; i < smallestSize; i++) {
-//		result->weights[i] = FMath::Min(A->weights[i], B->weights[i]);
-//	}
-//
-//	return result;
-//}
-//
-//USelectionSet * UStaticSetBPLibrary::Max_SelectionSetAgainstFloat(USelectionSet *Value, float Float)
-//{
-//	// Need a SelectionSet
-//	if (!Value) {
-//		return nullptr;
-//	}
-//
-//	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
-//	auto size = Value->weights.Num();
-//	result->weights.SetNumZeroed(size);
-//
-//	for (int32 i = 0; i < size; i++) {
-//		result->weights[i] = FMath::Max(Value->weights[i], Float);
-//	}
-//
-//	return result;
-//}
-//
-//USelectionSet * UStaticSetBPLibrary::Min_SelectionSetAgainstFloat(USelectionSet *Value, float Float)
-//{
-//	// Need a SelectionSet
-//	if (!Value) {
-//		return nullptr;
-//	}
-//
-//	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
-//	auto size = Value->weights.Num();
-//	result->weights.SetNumZeroed(size);
-//
-//	for (int32 i = 0; i < size; i++) {
-//		result->weights[i] = FMath::Min(Value->weights[i], Float);
-//	}
-//
-//	return result;
-//}
-//
-//USelectionSet * UStaticSetBPLibrary::Lerp_SelectionSets(USelectionSet *A, USelectionSet *B, float Alpha/*=0*/)
-//{
-//	// Need both provided
-//	if (!A || !B) {
-//		return nullptr;
-//	}
-//
-//	auto result = NewObject<USelectionSet>(A->GetOuter());
-//	int32 smallestSize = A->weights.Num() < B->weights.Num() ? A->weights.Num() : B->weights.Num();
-//	for (int32 i = 0; i < smallestSize; i++) {
-//		result->weights[i] = FMath::Lerp(A->weights[i], B->weights[i], Alpha);
-//	}
-//
-//	return result;
-//
-//}
-//
-//USelectionSet * UStaticSetBPLibrary::Lerp_SelectionSetWithFloat(USelectionSet *Value, float Float, float Alpha /*= 0*/)
-//{
-//	// Need a SelectionSet
-//	if (!Value) {
-//		return nullptr;
-//	}
-//
-//	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
-//	auto size = Value->weights.Num();
-//	result->weights.SetNumZeroed(size);
-//
-//	for (int32 i = 0; i < size; i++) {
-//		result->weights[i] = FMath::Lerp(Value->weights[i], Float, Alpha);
-//	}
-//
-//	return result;
-//}
+USelectionSet * UStaticSetBPLibrary::Max_SelectionSets(USelectionSet *A, USelectionSet *B)
+{
+	// Need both provided
+	if (!A || !B) {
+		return nullptr;
+	}
+
+	auto result = NewObject<USelectionSet>(A->GetOuter());
+	int32 smallestSize = A->weights.Num() < B->weights.Num() ? A->weights.Num() : B->weights.Num();
+	result->weights.SetNumZeroed(smallestSize);
+
+	for (int32 i = 0; i < smallestSize; i++) {
+		//result->weights[i] = A->weights[i] > B->weights[i] ? A->weights[i] : B->weights[i];
+		result->weights[i] = FMath::Max(A->weights[i], B->weights[i]);
+	}
+
+	return result;
+}
+
+USelectionSet * UStaticSetBPLibrary::Min_SelectionSets(USelectionSet *A, USelectionSet *B)
+{
+	// Need both provided
+	if (!A || !B) {
+		return nullptr;
+	}
+
+	auto result = NewObject<USelectionSet>(A->GetOuter());
+	int32 smallestSize = A->weights.Num() < B->weights.Num() ? A->weights.Num() : B->weights.Num();
+	result->weights.SetNumZeroed(smallestSize);
+
+	for (int32 i = 0; i < smallestSize; i++) {
+		//result->weights[i] = A->weights[i] < B->weights[i] ? A->weights[i] : B->weights[i];
+		result->weights[i] = FMath::Min(A->weights[i], B->weights[i]);
+	}
+
+	return result;
+}
+
+USelectionSet * UStaticSetBPLibrary::Max_SelectionSetAgainstFloat(USelectionSet *Value, float Float)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		//result->weights[i] = Value->weights[i] > Float ? Value->weights[i] : Float;
+		result->weights[i] = FMath::Max(Value->weights[i], Float);
+	}
+
+	return result;
+}
+
+USelectionSet * UStaticSetBPLibrary::Min_SelectionSetAgainstFloat(USelectionSet *Value, float Float)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		//result->weights[i] = Value->weights[i] < Float ? Value->weights[i] : Float;
+		result->weights[i] = FMath::Min(Value->weights[i], Float);
+	}
+
+	return result;
+}
+
+USelectionSet * UStaticSetBPLibrary::Lerp_SelectionSets(USelectionSet *A, USelectionSet *B, float Alpha/*=0*/)
+{
+	// Need both provided
+	if (!A || !B) {
+		return nullptr;
+	}
+
+	auto result = NewObject<USelectionSet>(A->GetOuter());
+	int32 smallestSize = A->weights.Num() < B->weights.Num() ? A->weights.Num() : B->weights.Num();
+	result->weights.SetNumZeroed(smallestSize);
+
+	for (int32 i = 0; i < smallestSize; i++) {
+		result->weights[i] = FMath::Lerp(A->weights[i], B->weights[i], Alpha);
+	}
+
+	return result;
+
+}
+
+USelectionSet * UStaticSetBPLibrary::Lerp_SelectionSetWithFloat(USelectionSet *Value, float Float, float Alpha /*= 0*/)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = FMath::Lerp(Value->weights[i], Float, Alpha);
+	}
+
+	return result;
+}

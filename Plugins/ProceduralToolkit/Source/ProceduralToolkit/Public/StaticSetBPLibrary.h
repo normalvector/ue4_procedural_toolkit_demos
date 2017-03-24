@@ -107,7 +107,7 @@ public:
 		meta = (DisplayName = "Randomize (SelectionSet)", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Randomize(USelectionSet *Value, FRandomStream RandomStream, float Min=0, float Max=1);
-/*	
+
 	// Max
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "Max (SelectionSet, SelectionSet)", Category = "Math|SelectionSet")
@@ -143,5 +143,4 @@ public:
 		meta = (DisplayName = "Lerp (SelectionSet, Float)", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Lerp_SelectionSetWithFloat(USelectionSet *A, float B, float Alpha = 0);
-	*/
 };
