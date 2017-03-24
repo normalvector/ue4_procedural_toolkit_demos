@@ -45,4 +45,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Translate(FVector delta, USelectionSet *selection);
+
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void Rotate(FRotator Rotation = FRotator::ZeroRotator, FVector CenterOfRotation = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 };

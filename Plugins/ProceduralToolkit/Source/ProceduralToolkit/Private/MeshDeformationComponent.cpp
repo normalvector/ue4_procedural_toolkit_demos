@@ -71,3 +71,13 @@ void UMeshDeformationComponent::Translate(FVector delta, USelectionSet *selectio
 	}
 	meshGeometry->Translate(delta, selection);
 }
+
+void UMeshDeformationComponent::Rotate(FRotator Rotation/*= FRotator::ZeroRotator*/, FVector CenterOfRotation /*= FVector::ZeroVector*/, USelectionSet *Selection /*=nullptr*/)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("Rotate: No meshGeometry loaded"));
+		return;
+	}
+	meshGeometry->Rotate(Rotation, CenterOfRotation, Selection);
+
+}

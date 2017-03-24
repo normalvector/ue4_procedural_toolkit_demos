@@ -183,6 +183,31 @@ void UMeshGeometry::Translate(FVector delta, USelectionSet *selection)
 				vertex += delta;
 			}
 		}
-	
+	}
+}
+
+void UMeshGeometry::Rotate(FRotator Rotation /*= FRotator::ZeroRotator*/, FVector CenterOfRotation /*= FVector::ZeroVector*/, USelectionSet *Selection)
+{
+	// Check if there's any need to apply weights
+	if (Selection) {
+		// Iterate over the sections, and the the vertices in the sections.
+		int32 nextSelectionIndex = 0;
+		for (auto &section : this->sections) {
+			for (auto &vertex : section.vertices) {
+				vertex = FMath::Lerp(
+					vertex,
+					CenterOfRotation + Rotation.RotateVector(vertex - CenterOfRotation),
+					Selection->weights[nextSelectionIndex++]
+				);
+			}
+		}
+	}
+	else {
+		// Iterate over the sections, and the the vertices in the sections.
+		for (auto &section : this->sections) {
+			for (auto &vertex : section.vertices) {
+				vertex = CenterOfRotation + Rotation.RotateVector(vertex - CenterOfRotation);
+			}
+		}
 	}
 }

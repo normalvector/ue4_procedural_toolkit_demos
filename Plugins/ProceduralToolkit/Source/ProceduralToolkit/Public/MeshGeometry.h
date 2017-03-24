@@ -59,4 +59,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
 		void Translate(FVector delta, USelectionSet *selection);
+
+	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
+		void Rotate(FRotator Rotation = FRotator::ZeroRotator, FVector CenterOfRotation = FVector::ZeroVector, USelectionSet *Selection=nullptr);
 };
