@@ -233,11 +233,30 @@ void UMeshGeometry::Spherize(float SphereRadius /*= 100.0f*/, float FilterStreng
 	for (auto &section : this->sections) {
 		for (auto &vertex : section.vertices) {
 			vertexRelativeToCenter = vertex - SphereCenter;
+			// Calculate the required length- incorporating both the SphereRadius and Selection.
 			targetVectorLength = FMath::Lerp(vertexRelativeToCenter.Size(), SphereRadius, FilterStrength * (Selection ? Selection->weights[nextSelectionIndex++] : 1.0f));
 			// TODO: Think what happens when this fails?
 			if (vertexRelativeToCenter.Normalize()) {
 				vertex = SphereCenter + (vertexRelativeToCenter * targetVectorLength);
 			}
+		}
+	}
+}
+
+void UMeshGeometry::Inflate(float Offset /*= 0.0f*/, USelectionSet *Selection /*= nullptr*/)
+{
+	// TODO: Check selectionSet size.
+	// TODO: Check normals size.
+
+	// Iterate over the sections, and the the vertices in the sections.
+	// As we need normals to we'll use an index-based for loop here for verts.
+	for (auto &section : this->sections) {
+		for (int32 vertexIndex = 0; vertexIndex < section.vertices.Num(); ++vertexIndex) {
+			section.vertices[vertexIndex] = FMath::Lerp(
+				section.vertices[vertexIndex],
+				section.vertices[vertexIndex] + (section.normals[vertexIndex] * Offset),
+				Selection ? Selection->weights[vertexIndex] : 1.0f
+			);
 		}
 	}
 }

@@ -78,5 +78,6 @@ public:
 		void Spherize(float SphereRadius = 100.0f, float FilterStrength = 1.0f, FVector SphereCenter = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
 	// Moves vertices along their own normals
-	//UFUNCTION(BlueprintCallable, Cateo)
+	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
+		void Inflate(float Offset = 0.0f, USelectionSet *Selection = nullptr);
 };

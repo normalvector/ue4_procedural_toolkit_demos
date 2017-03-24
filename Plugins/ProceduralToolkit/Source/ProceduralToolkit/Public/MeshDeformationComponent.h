@@ -60,4 +60,9 @@ public:
 	// Makes a mesh more like a sphere by scaling along vectors to an adjustable strength.
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Spherize(float SphereRadius = 100.0f, float FilterStrength = 1.0f, FVector SphereCenter = FVector::ZeroVector, USelectionSet *Selection = nullptr);
+
+
+	// Moves vertices along their own normals
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void Inflate(float Offset = 0.0f, USelectionSet *Selection = nullptr);
 };

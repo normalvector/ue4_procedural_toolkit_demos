@@ -108,3 +108,12 @@ void UMeshDeformationComponent::Spherize(float SphereRadius /*= 100.0f*/, float 
 	}
 	meshGeometry->Spherize(SphereRadius, FilterStrength, SphereCenter, Selection);
 }
+
+void UMeshDeformationComponent::Inflate(float Offset /*= 0.0f*/, USelectionSet *Selection /*= nullptr*/)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("Spherize: No meshGeometry loaded"));
+		return;
+	}
+	meshGeometry->Inflate(Offset, Selection);
+}
