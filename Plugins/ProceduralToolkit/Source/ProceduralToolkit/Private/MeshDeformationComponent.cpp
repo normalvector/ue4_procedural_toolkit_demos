@@ -81,3 +81,30 @@ void UMeshDeformationComponent::Rotate(FRotator Rotation/*= FRotator::ZeroRotato
 	meshGeometry->Rotate(Rotation, CenterOfRotation, Selection);
 
 }
+
+void UMeshDeformationComponent::Scale(FVector Scale3d /*= FVector(1, 1, 1)*/, FVector CenterOfScale /*= FVector::ZeroVector*/, USelectionSet *Selection /*= nullptr*/)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("Scale: No meshGeometry loaded"));
+		return;
+	}
+	meshGeometry->Scale(Scale3d, CenterOfScale, Selection);
+}
+
+void UMeshDeformationComponent::Transform(FTransform Transform, FVector CenterOfTransform /*= FVector::ZeroVector*/, USelectionSet *Selection /*= nullptr*/)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("Transform: No meshGeometry loaded"));
+		return;
+	}
+	meshGeometry->Transform(Transform, CenterOfTransform, Selection);
+}
+
+void UMeshDeformationComponent::Spherize(float SphereRadius /*= 100.0f*/, float FilterStrength /*= 1.0f*/, FVector SphereCenter /*= FVector::ZeroVector*/, USelectionSet *Selection /*= nullptr*/)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("Spherize: No meshGeometry loaded"));
+		return;
+	}
+	meshGeometry->Spherize(SphereRadius, FilterStrength, SphereCenter, Selection);
+}

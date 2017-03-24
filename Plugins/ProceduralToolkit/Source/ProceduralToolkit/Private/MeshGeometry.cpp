@@ -134,79 +134,109 @@ void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max,
 {
 	// TODO: Check selectionSet size.
 
-	// Check if there's any need to apply weights
-	if (selection) {
-		// Iterate over the sections, and the the vertices in the sections.
-		int32 nextSelectionIndex = 0;
-		float weight;
-			// Iterate over the sections, and the vertices in each section.
-			for (auto &section : this->sections) {
-				for (auto &vertex : section.vertices) {
-					weight = selection->weights[nextSelectionIndex++];
-					vertex.X += randomStream.FRandRange(min.X, max.X) * weight;
-					vertex.Y += randomStream.FRandRange(min.Y, max.Y) * weight;
-					vertex.Z += randomStream.FRandRange(min.Z, max.Z) * weight;
-				}
-		}
-	}
-	else {
+	// Iterate over the sections, and the the vertices in the sections.
+	int32 nextSelectionIndex = 0;
+	FVector randomJitter;
 		// Iterate over the sections, and the vertices in each section.
 		for (auto &section : this->sections) {
 			for (auto &vertex : section.vertices) {
-				vertex.X += randomStream.FRandRange(min.X, max.X);
-				vertex.Y += randomStream.FRandRange(min.Y, max.Y);
-				vertex.Z += randomStream.FRandRange(min.Z, max.Z);
+				randomJitter = FVector(
+					randomStream.FRandRange(min.X, max.X),
+					randomStream.FRandRange(min.Y, max.Y),
+					randomStream.FRandRange(min.Z, max.Z)
+				);
+				vertex = FMath::Lerp(
+					vertex,
+					vertex + randomJitter,
+					selection ? selection->weights[nextSelectionIndex++] : 1.0f
+				);
 			}
-		}
 	}
-
 }
 
 void UMeshGeometry::Translate(FVector delta, USelectionSet *selection)
 {
 	// TODO: Check selectionSet size.
 
-	// Check if there's any need to apply weights
-	if (selection) {
-		// Iterate over the sections, and the the vertices in the sections.
-		int32 nextSelectionIndex = 0;
-		for (auto &section : this->sections) {
-			for (auto &vertex : section.vertices) {
-				vertex = FMath::Lerp(vertex, vertex + delta, selection->weights[nextSelectionIndex++]);
-			}
-		}
-	}
-	else {
-		// Iterate over the sections, and the the vertices in the sections.
-		for (auto &section : this->sections) {
-			for (auto &vertex : section.vertices) {
-				vertex += delta;
-			}
+	// Iterate over the sections, and the the vertices in the sections.
+	int32 nextSelectionIndex = 0;
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			vertex = FMath::Lerp(
+				vertex,
+				vertex + delta,
+				selection ? selection->weights[nextSelectionIndex++] : 1.0f
+			);
 		}
 	}
 }
 
 void UMeshGeometry::Rotate(FRotator Rotation /*= FRotator::ZeroRotator*/, FVector CenterOfRotation /*= FVector::ZeroVector*/, USelectionSet *Selection)
 {
-	// Check if there's any need to apply weights
-	if (Selection) {
-		// Iterate over the sections, and the the vertices in the sections.
-		int32 nextSelectionIndex = 0;
-		for (auto &section : this->sections) {
-			for (auto &vertex : section.vertices) {
-				vertex = FMath::Lerp(
-					vertex,
-					CenterOfRotation + Rotation.RotateVector(vertex - CenterOfRotation),
-					Selection->weights[nextSelectionIndex++]
-				);
-			}
+	// TODO: Check SelectionSet size.
+
+	// Iterate over the sections, and the the vertices in the sections.
+	int32 nextSelectionIndex = 0;
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			vertex = FMath::Lerp(
+				vertex,
+				CenterOfRotation + Rotation.RotateVector(vertex - CenterOfRotation),
+				Selection ? Selection->weights[nextSelectionIndex++] : 1.0f
+			);
 		}
 	}
-	else {
-		// Iterate over the sections, and the the vertices in the sections.
-		for (auto &section : this->sections) {
-			for (auto &vertex : section.vertices) {
-				vertex = CenterOfRotation + Rotation.RotateVector(vertex - CenterOfRotation);
+}
+
+void UMeshGeometry::Scale(FVector Scale3d /*= FVector(1, 1, 1)*/, FVector CenterOfScale /*= FVector::ZeroVector*/, USelectionSet *Selection /*= nullptr*/)
+{
+	// TODO: Check selectionSet size.
+
+	// Iterate over the sections, and the the vertices in the sections.
+	int32 nextSelectionIndex = 0;
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			vertex = FMath::Lerp(
+				vertex,
+				CenterOfScale + (vertex - CenterOfScale) * Scale3d,
+				Selection ? Selection->weights[nextSelectionIndex++] : 1.0f
+			);
+		}
+	}
+}
+
+void UMeshGeometry::Transform(FTransform Transform /*= FTransform::Identity*/, FVector CenterOfTransform /*= FVector::ZeroVector*/, USelectionSet *Selection /*= nullptr*/)
+{
+	// TODO: Check selectionSet size.
+
+	// Iterate over the sections, and the the vertices in the sections.
+	int32 nextSelectionIndex = 0;
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			vertex = FMath::Lerp(
+				vertex,
+				CenterOfTransform + Transform.TransformPosition(vertex - CenterOfTransform),
+				Selection ? Selection->weights[nextSelectionIndex++] : 1.0f
+			);
+		}
+	}
+}
+
+void UMeshGeometry::Spherize(float SphereRadius /*= 100.0f*/, float FilterStrength /*= 1.0f*/, FVector SphereCenter /*= FVector::ZeroVector*/, USelectionSet *Selection)
+{
+	// TODO: Check selectionSet size.
+
+	// Iterate over the sections, and the the vertices in the sections.
+	int32 nextSelectionIndex = 0;
+	FVector vertexRelativeToCenter;
+	float targetVectorLength;
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			vertexRelativeToCenter = vertex - SphereCenter;
+			targetVectorLength = FMath::Lerp(vertexRelativeToCenter.Size(), SphereRadius, FilterStrength * (Selection ? Selection->weights[nextSelectionIndex++] : 1.0f));
+			// TODO: Think what happens when this fails?
+			if (vertexRelativeToCenter.Normalize()) {
+				vertex = SphereCenter + (vertexRelativeToCenter * targetVectorLength);
 			}
 		}
 	}

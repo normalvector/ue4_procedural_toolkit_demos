@@ -48,4 +48,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Rotate(FRotator Rotation = FRotator::ZeroRotator, FVector CenterOfRotation = FVector::ZeroVector, USelectionSet *Selection = nullptr);
+
+	// Scale the selected points about a specified center
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void Scale(FVector Scale3d = FVector(1, 1, 1), FVector CenterOfScale = FVector::ZeroVector, USelectionSet *Selection = nullptr);
+
+	// Applies a transform (Translate/Rotate/Scale) as a single operation.
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void Transform(FTransform Transform, FVector CenterOfTransform = FVector::ZeroVector, USelectionSet *Selection = nullptr);
+
+	// Makes a mesh more like a sphere by scaling along vectors to an adjustable strength.
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void Spherize(float SphereRadius = 100.0f, float FilterStrength = 1.0f, FVector SphereCenter = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 };
