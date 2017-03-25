@@ -14,8 +14,9 @@ UMeshDeformationComponent::UMeshDeformationComponent()
 	// ...
 }
 
-bool UMeshDeformationComponent::LoadFromStaticMesh(UStaticMesh *staticMesh, int32 LOD /*= 0*/)
+bool UMeshDeformationComponent::LoadFromStaticMesh(UMeshDeformationComponent *&MeshDeformationComponent, UStaticMesh *staticMesh, int32 LOD /*= 0*/)
 {
+	MeshDeformationComponent = this;
 	meshGeometry = NewObject<UMeshGeometry>(this);
 	bool success = meshGeometry->LoadFromStaticMesh(staticMesh);
 	if (!success) {
