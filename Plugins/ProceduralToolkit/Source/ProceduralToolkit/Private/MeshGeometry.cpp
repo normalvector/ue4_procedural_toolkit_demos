@@ -110,9 +110,7 @@ USelectionSet *UMeshGeometry::SelectAll()
 USelectionSet * UMeshGeometry::SelectNear(FVector center /*=FVector::ZeroVector*/, float innerRadius/*=0*/, float outerRadius/*=100*/)
 {
 	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
-	//newSelectionSet->CreateSelectionSet(this->TotalVertexCount());
 
-	int32 nextVertexIndex = 0;
 	// Iterate over the sections, and the vertices in each section.
 	float distanceFromCenter;
 	float distanceBias;
@@ -124,6 +122,42 @@ USelectionSet * UMeshGeometry::SelectNear(FVector center /*=FVector::ZeroVector*
 			// Apply bias to map distance to 0-1 based on innerRadius and outerRadius
 			distanceBias = 1.0f - FMath::Clamp((distanceFromCenter - innerRadius) / selectionRadius, 0.0f, 1.0f);
 			newSelectionSet->weights.Emplace(distanceBias);
+		}
+	}
+
+	return newSelectionSet;
+}
+
+USelectionSet * UMeshGeometry::SelectFacing(FVector Facing /*= FVector::UpVector*/, float InnerRadiusInDegrees /*= 0*/, float OuterRadiusInDegrees /*= 30.0f*/)
+{
+	// TODO: Check geometry looks valid (normals.Num == vertices.Num)
+
+	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
+	
+	// Normalize the facing vector.
+	if (!Facing.Normalize()) {
+		// TODO: Better error handling.
+		return newSelectionSet;
+	}
+
+	// Iterate over the sections, and the the normals in the sections.
+	float selectionRadius = OuterRadiusInDegrees - InnerRadiusInDegrees;
+	float angleBias;
+	float angleToNormal;
+	FVector normalizedNormal;
+	// As we need normals to we'll use an index-based for loop here for verts.
+	for (auto &section : this->sections) {
+		for (auto normal : section.normals) {
+			normalizedNormal = normal;
+
+			if (normalizedNormal.Normalize()) {
+				// Calculate the dot product between the normal and the Facing.
+				angleToNormal = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(normal, Facing)));
+				angleBias = 1.0f - FMath::Clamp((angleToNormal - InnerRadiusInDegrees) / selectionRadius, 0.0f, 1.0f);
+				newSelectionSet->weights.Emplace(angleBias);
+			} else {
+				newSelectionSet->weights.Emplace(0);
+			}
 		}
 	}
 

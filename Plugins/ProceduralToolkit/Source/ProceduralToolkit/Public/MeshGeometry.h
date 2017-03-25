@@ -48,8 +48,18 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectAll();
 
+	// Select vertices near a point (Radial selection)
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectNear(FVector center =FVector::ZeroVector, float innerRadius=0, float outerRadius=100);
+
+	// Select vertices with a given normal facing
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectFacing(FVector Facing = FVector::UpVector, float InnerRadiusInDegrees = 0, float OuterRadiusInDegrees = 30.0f);
+
+	// Select linear
+	// Select near line segment
+	// Select near spline
+	// Select by noise function
 
 	///// Deformation utilities
 	

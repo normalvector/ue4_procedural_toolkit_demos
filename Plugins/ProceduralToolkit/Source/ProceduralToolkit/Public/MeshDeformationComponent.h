@@ -32,12 +32,16 @@ public:
 	///// Selection Set utilities
 
 	// Select all vertices
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectAll();
 
 	// Select points near a point in space.
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectNear(FVector center = FVector::ZeroVector, float innerRadius = 0, float outerRadius = 100);
+
+	// Select vertices with a given normal facing
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
+		USelectionSet *SelectFacing(FVector Facing = FVector::UpVector, float InnerRadiusInDegrees = 0, float OuterRadiusInDegrees = 30.0f);
 
 	///// Deformation utilities
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
