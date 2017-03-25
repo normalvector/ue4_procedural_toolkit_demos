@@ -421,7 +421,7 @@ Blends two SelectionSets together with a straight alpha blend, so Alpha=0 won't 
 * Check SelectionSet sizes in operations which take multiple sets.
 
 ----
-## LICENSE ([MIT License](https://en.wikipedia.org/wiki/MIT_License)
+## LICENSE ([MIT License](https://en.wikipedia.org/wiki/MIT_License))
 
 Copyright 2017 Paul Golds.
 
