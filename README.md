@@ -13,6 +13,7 @@ In order to allow complex effects this supports:
 * Can be extended in Blueprint to add custom transformations and selection controls.
 
 Variables stored inside MeshDeformationComponent:
+
 | Variable | Description |
 |---|---|
 | MeshGeometry | The current geometry of the mesh being processed |
@@ -180,6 +181,12 @@ A SelectionSet allows the selection of items from a collection of items in a wei
 
 Internally a SelectionSet contains an array of floats, one per item, in the same order that the items themselves were provided.
 
+Variables stored inside SelectionSet are:
+
+| Variable | Description |
+|---|---|
+| weights | The array of selection weights (Floats, normally in the 0-1 range but not capped) in the order provided |
+ 
 Currently the following are implemented as SelectionSets:
 * Choosing the vertices of a [MeshGeometry] to affect with a Transform Geometry node.
 
