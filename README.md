@@ -186,7 +186,7 @@ Variables stored inside SelectionSet are:
 | Variable | Description |
 |---|---|
 | weights | The array of selection weights (Floats, normally in the 0-1 range but not capped) in the order provided |
- 
+
 Currently the following are implemented as SelectionSets:
 * Choosing the vertices of a [MeshGeometry] to affect with a Transform Geometry node.
 
@@ -419,3 +419,14 @@ Blends two SelectionSets together with a straight alpha blend, so Alpha=0 won't 
 * Support for [Runtime Mesh Component](https://forums.unrealengine.com/showthread.php?113432-Runtime-Mesh-Component-Rendering-high-performance-runtime-generated-meshes!).
 * Sort nodes and docs in a sensible order
 * Check SelectionSet sizes in operations which take multiple sets.
+
+----
+## LICENSE
+
+Copyright 2017 Paul Golds.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
