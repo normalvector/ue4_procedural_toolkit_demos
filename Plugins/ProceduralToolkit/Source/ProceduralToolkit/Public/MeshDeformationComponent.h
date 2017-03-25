@@ -27,7 +27,7 @@ public:
 
 	// Write out the geometry to a ProceduralMeshComponent.
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		bool UpdateProceduralMeshComponent(UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
+		bool UpdateProceduralMeshComponent(UMeshDeformationComponent *&MeshDeformationComponent, UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
 
 	///// Selection Set utilities
 
@@ -45,28 +45,28 @@ public:
 
 	///// Deformation utilities
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Jitter(FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection);
+		void Jitter(UMeshDeformationComponent *&MeshDeformationComponent, FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection);
 
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Translate(FVector delta, USelectionSet *selection);
+		void Translate(UMeshDeformationComponent *&MeshDeformationComponent, FVector delta, USelectionSet *selection);
 
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Rotate(FRotator Rotation = FRotator::ZeroRotator, FVector CenterOfRotation = FVector::ZeroVector, USelectionSet *Selection = nullptr);
+		void Rotate(UMeshDeformationComponent *&MeshDeformationComponent, FRotator Rotation = FRotator::ZeroRotator, FVector CenterOfRotation = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
 	// Scale the selected points about a specified center
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Scale(FVector Scale3d = FVector(1, 1, 1), FVector CenterOfScale = FVector::ZeroVector, USelectionSet *Selection = nullptr);
+		void Scale(UMeshDeformationComponent *&MeshDeformationComponent, FVector Scale3d = FVector(1, 1, 1), FVector CenterOfScale = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
 	// Applies a transform (Translate/Rotate/Scale) as a single operation.
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Transform(FTransform Transform, FVector CenterOfTransform = FVector::ZeroVector, USelectionSet *Selection = nullptr);
+		void Transform(UMeshDeformationComponent *&MeshDeformationComponent, FTransform Transform, FVector CenterOfTransform = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
 	// Makes a mesh more like a sphere by scaling along vectors to an adjustable strength.
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Spherize(float SphereRadius = 100.0f, float FilterStrength = 1.0f, FVector SphereCenter = FVector::ZeroVector, USelectionSet *Selection = nullptr);
+		void Spherize(UMeshDeformationComponent *&MeshDeformationComponent, float SphereRadius = 100.0f, float FilterStrength = 1.0f, FVector SphereCenter = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
 
 	// Moves vertices along their own normals
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Inflate(float Offset = 0.0f, USelectionSet *Selection = nullptr);
+		void Inflate(UMeshDeformationComponent *&MeshDeformationComponent, float Offset = 0.0f, USelectionSet *Selection = nullptr);
 };
