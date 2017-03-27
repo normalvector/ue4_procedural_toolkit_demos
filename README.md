@@ -153,6 +153,29 @@ Modifies geometry by moving each vertex along their own normal by the offset pro
 | Selection | In |An optional [SelectionSet](#SelectionSet) controlling the strength of the transformation on a per-vertex basis.  If not provided all vertices will be fully affected. |
 | MeshDeformationComponent | Out | Returns the target component to allow easy chaining. |
 
+#### **ScaleAlongAxis** (Transform Geometry)
+Modifies geometry by scaling it along a specified axis.  This is more flexible than the standard XYZ scaling.
+
+| Pin | In/Out | Description |
+|---|---|---|
+| SphereRadius | In | The radius of the target sphere |
+| SphereCenter | In | The center of the target sphere |
+| FilterStrength | In | An overall strength setting, applied on top of Selection |
+| Selection | In |An optional [SelectionSet](#SelectionSet) controlling the strength of the transformation on a per-vertex basis.  If not provided all vertices will be fully affected. |
+| MeshDeformationComponent | Out | Returns the target component to allow easy chaining. |
+
+**TODO:** Params in C++ in slightly odd order, redo as doc here to put sphere params next to one another.
+
+#### **Inflate** (Transform geometry)
+Modifies geometry by moving each vertex along their own normal by the offset provided.
+
+| Pin | In/Out | Description |
+|---|---|---|
+| CenterOfScale | In | The center point for the transform |
+| Axis | In | The axis that the object will be scaled on |
+| Scale | In | The scale factor | [SelectionSet](#SelectionSet) controlling the strength of the transformation on a per-vertex basis.  If not provided all vertices will be fully affected. |
+| MeshDeformationComponent | Out | Returns the target component to allow easy chaining. |
+
 ### TODO (MeshDeformationComponent):
 * Allow other sources of geometry
   * Loading .fbx/.obj files at runtime
@@ -167,8 +190,14 @@ Modifies geometry by moving each vertex along their own normal by the offset pro
   * Select by VertexColor (Needs a StaticMeshComponent as input, but that can be deleted/hidden in final level)
   * Select by connectivity (May wait for OpenMesh integration)
   * Select by noise function (Needs suitable noise library)
+* More transformations (Nothing topological yet)
+  * Rotate About axis
+  * Bend
+  * Twist
+  * Taper
+  * Gravity (Similar to Transform -Z, but with a Lerp to bounding box limits)
 * More outputs
-  * Output to .fbx/.obj
+  * Output t\o .fbx/.obj
   * Can we hook into the StaticMesh system to allow direct output to the Content Browser?
 * Better handling for normals- they seem to be autorebuilt at the moment.
 * Handling for VertexColors, can we use VC-based Materials on a PMC?
@@ -413,6 +442,7 @@ Blends two SelectionSets together with a straight alpha blend, so Alpha=0 won't 
 
 ## General TODO
 * Some C++ conventions to check
+* Put variable declarations inside loops- let the C++ optimizer deal with those.-
 * Enforce UE4-style naming (UpperCamelCase for variables)
 * Check the passing of FRandomStream, should it be reference?
 * Add Javadoc-docs based on this document- which can then be used by doxygen to create this document's replacement!

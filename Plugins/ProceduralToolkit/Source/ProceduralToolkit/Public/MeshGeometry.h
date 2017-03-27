@@ -90,4 +90,12 @@ public:
 	// Moves vertices along their own normals
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
 		void Inflate(float Offset = 0.0f, USelectionSet *Selection = nullptr);
+
+	// Scale geometry along a specified axis.
+	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
+		void ScaleAlongAxis(FVector CenterOfScale = FVector::ZeroVector, FVector Axis = FVector::UpVector, float Scale = 1.0f, USelectionSet *Selection = nullptr);
+
+	// Rotates geometry round a specified axis.
+	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
+		void RotateAroundAxis(FVector CenterOfRotation = FVector::ZeroVector, FVector Axis = FVector::UpVector, float AngleInDegrees = 0.0f, USelectionSet *Selection = nullptr);
 };

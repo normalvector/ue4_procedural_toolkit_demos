@@ -294,3 +294,48 @@ void UMeshGeometry::Inflate(float Offset /*= 0.0f*/, USelectionSet *Selection /*
 		}
 	}
 }
+
+void UMeshGeometry::ScaleAlongAxis(FVector CenterOfScale /*= FVector::ZeroVector*/, FVector Axis /*= FVector::UpVector*/, float Scale /*= 1.0f*/, USelectionSet *Selection /*= nullptr*/)
+{
+	// TODO Check SelectionSet size
+	// TODO: Check non-zero vectors.
+
+	// Iterate over the sections, and the the vertices in the sections.
+	int32 nextSelectionIndex = 0;
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			FVector closestPointOnLine = FMath::ClosestPointOnInfiniteLine(CenterOfScale, CenterOfScale + Axis, vertex);
+			FVector offsetFromClosestPoint = vertex - closestPointOnLine;
+			FVector scaledPointOnLine = Scale * (closestPointOnLine - CenterOfScale) + CenterOfScale;
+			vertex = FMath::Lerp(vertex, scaledPointOnLine + offsetFromClosestPoint, Selection ? Selection->weights[nextSelectionIndex++] : 1.0f);
+		}
+	}
+}
+
+void UMeshGeometry::RotateAroundAxis(FVector CenterOfRotation /*= FVector::ZeroVector*/, FVector Axis /*= FVector::UpVector*/, float AngleInDegrees /*= 0.0f*/, USelectionSet *Selection /*= nullptr*/)
+{
+	// TODO Check SelectionSet size
+	// TODO: Check non-zero vectors.
+
+	// Normalize the axis direction.
+	auto normalizedAxis = Axis.GetSafeNormal();
+	if (normalizedAxis.IsNearlyZero(0.1f)) {
+		UE_LOG(LogTemp, Error, TEXT("RotateAroundAxis: Could not normalize Axis, zero vector?"));
+		return;
+	}
+
+	// Iterate over the sections, and the the vertices in the sections.
+	int32 nextSelectionIndex = 0;
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			FVector closestPointOnLine = FMath::ClosestPointOnInfiniteLine(CenterOfRotation, CenterOfRotation + Axis, vertex);
+			FVector offsetFromClosestPoint = vertex - closestPointOnLine;
+			float scaledRotation = FMath::Lerp(
+				0.0f, AngleInDegrees,
+				Selection ? Selection->weights[nextSelectionIndex++] : 1.0f
+			);
+			FVector rotatedOffset = offsetFromClosestPoint.RotateAngleAxis(scaledRotation, normalizedAxis);
+			vertex = closestPointOnLine + rotatedOffset;
+		}
+	}
+}

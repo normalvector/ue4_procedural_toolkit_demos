@@ -65,8 +65,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Spherize(UMeshDeformationComponent *&MeshDeformationComponent, float SphereRadius = 100.0f, float FilterStrength = 1.0f, FVector SphereCenter = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
-
 	// Moves vertices along their own normals
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Inflate(UMeshDeformationComponent *&MeshDeformationComponent, float Offset = 0.0f, USelectionSet *Selection = nullptr);
+
+	// Scale an object along an arbitrary axis
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void ScaleAlongAxis(UMeshDeformationComponent *&MeshDeformationComponent, FVector CenterOfScale = FVector::ZeroVector, FVector Axis = FVector::UpVector, float Scale = 1.0f, USelectionSet *Selection = nullptr);
+
+	// Rotate an object around an arbitrary axis
+	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
+		void RotateAroundAxis(UMeshDeformationComponent *&MeshDeformationComponent, FVector CenterOfRotation = FVector::ZeroVector, FVector Axis = FVector::UpVector, float AngleInDegrees = 0.0f, USelectionSet *Selection = nullptr);
 };

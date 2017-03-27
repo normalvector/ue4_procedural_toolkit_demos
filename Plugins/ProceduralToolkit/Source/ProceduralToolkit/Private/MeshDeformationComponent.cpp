@@ -135,3 +135,24 @@ void UMeshDeformationComponent::Inflate(UMeshDeformationComponent *&MeshDeformat
 	}
 	meshGeometry->Inflate(Offset, Selection);
 }
+
+void UMeshDeformationComponent::ScaleAlongAxis(UMeshDeformationComponent *&MeshDeformationComponent, FVector CenterOfScale /*= FVector::ZeroVector*/, FVector Axis /*= FVector::UpVector*/, float Scale /*= 1.0f*/, USelectionSet *Selection /*= nullptr*/)
+{
+	MeshDeformationComponent = this;
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("Spherize: No meshGeometry loaded"));
+		return;
+	}
+	meshGeometry->ScaleAlongAxis(CenterOfScale, Axis, Scale, Selection);
+}
+
+void UMeshDeformationComponent::RotateAroundAxis(UMeshDeformationComponent *&MeshDeformationComponent, FVector CenterOfRotation /*= FVector::ZeroVector*/, FVector Axis /*= FVector::UpVector*/, float AngleInDegrees /*= 0.0f*/, USelectionSet *Selection /*= nullptr*/)
+{
+
+	MeshDeformationComponent = this;
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("Spherize: No meshGeometry loaded"));
+		return;
+	}
+	meshGeometry->RotateAroundAxis(CenterOfRotation, Axis, AngleInDegrees, Selection);
+}
