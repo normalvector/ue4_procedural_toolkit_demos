@@ -4,7 +4,7 @@ using UnrealBuildTool;
 
 public class ProceduralTKDemos : ModuleRules
 {
-	public ProceduralTKDemos(TargetInfo Target)
+	public ProceduralTKDemos(ReadOnlyTargetRules targetRules)
 	{
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 

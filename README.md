@@ -427,7 +427,6 @@ Blends two SelectionSets together with a straight alpha blend, so Alpha=0 won't 
 | Return | Out | The blended result |
 
 ### TODO (SelectionSet):
-* SelectionSetBPLibrary is currently incorrectly named as StaticSetBPLibrary for some stupid reason.
 * Auto-levels node
 * 'Ripple' node
 * Modulus node
@@ -442,7 +441,7 @@ Blends two SelectionSets together with a straight alpha blend, so Alpha=0 won't 
 
 ## General TODO
 * Some C++ conventions to check
-* Put variable declarations inside loops- let the C++ optimizer deal with those.-
+* Put variable declarations inside loops- let the C++ optimizer deal with those.
 * Enforce UE4-style naming (UpperCamelCase for variables)
 * Check the passing of FRandomStream, should it be reference?
 * Add Javadoc-docs based on this document- which can then be used by doxygen to create this document's replacement!

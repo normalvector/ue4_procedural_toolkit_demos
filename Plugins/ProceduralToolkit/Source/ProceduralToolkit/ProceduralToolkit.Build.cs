@@ -4,7 +4,7 @@ using UnrealBuildTool;
 
 public class ProceduralToolkit : ModuleRules
 {
-	public ProceduralToolkit(TargetInfo Target)
+	public ProceduralToolkit(ReadOnlyTargetRules targetRules)
 	{
 		
 		PublicIncludePaths.AddRange(
