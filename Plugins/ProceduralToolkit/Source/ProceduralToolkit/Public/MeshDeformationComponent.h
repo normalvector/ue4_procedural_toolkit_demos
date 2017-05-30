@@ -7,16 +7,16 @@
 #include "MeshDeformationComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom),meta=(BlueprintSpawnableComponent))
 class PROCEDURALTOOLKIT_API UMeshDeformationComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+	/// Sets default values for this component's properties
 	UMeshDeformationComponent();
 
-	// This is the mesh geometry currently stored within the component
+	/// This is the mesh geometry currently stored within the component
 	UPROPERTY(BlueprintReadonly, Category = MeshDeformationComponent)
 		UMeshGeometry *meshGeometry = nullptr;
 
@@ -76,4 +76,4 @@ public:
 	// Rotate an object around an arbitrary axis
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void RotateAroundAxis(UMeshDeformationComponent *&MeshDeformationComponent, FVector CenterOfRotation = FVector::ZeroVector, FVector Axis = FVector::UpVector, float AngleInDegrees = 0.0f, USelectionSet *Selection = nullptr);
-};
+}
