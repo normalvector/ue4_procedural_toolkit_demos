@@ -7,6 +7,12 @@
 #include "MeshDeformationComponent.generated.h"
 
 
+/// \todo Select linear - Select based on a position and a linear falloff
+/// \todo Select near line segment - Select based on distance to start/end points
+/// \todo Select near spline - Select based on distance from a SplineComponent
+/// \todo Select by noise function - Select based on the FastNoise library
+/// \todo Check that FRandomStream is correctly passed
+
 /// *ActorComponent* for easy geometry deformation.
 ///
 /// This is the main class for the *Mesh Deformation Component*, and
@@ -75,16 +81,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		bool UpdateProceduralMeshComponent(UMeshDeformationComponent *&MeshDeformationComponent, UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
 
-	/// <summary>
 	/// Selects all of the vertices at full strength.
-	/// </summary>
-	/// <returns>A *SelectionSet* with full strength</returns>
+	///
+	/// /return A *SelectionSet* with full strength
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectAll();
 
 	/// Selects the vertices near a point in space.
 	///
-	/// This does a smooth linear selection based on distance form the point provided.
+	/// This does a smooth linear radial selection based on distance form the point provided.
 	///
 	/// \param center		The center of the selection in local space
 	/// \param innerRadius	The inner radius, all points inside this will be selected at
@@ -107,7 +112,7 @@ public:
 		USelectionSet *SelectFacing(FVector Facing = FVector::UpVector, float InnerRadiusInDegrees = 0, float OuterRadiusInDegrees = 30.0f);
 
 	/// Adds random jitter to the position of the points.
-
+	///
 	///  The jitter will be a vector randomly selected
 	///  (with [continuous uniform distribution]() between *Min* and *Max*, and will
 	///  be scaled by each vertex's selection weights if they're provided.
@@ -155,7 +160,7 @@ public:
 	/// \param Scale3d							The per-axis scaling
 	/// \param CenterOfScale					The center of the scaling operation in local space
 	/// \param Selection						The selection weights, if not specified then all
-	///											vertices will be scaled fully by the specifed scale
+	///											vertices will be scaled fully by the specified scale
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Scale(UMeshDeformationComponent *&MeshDeformationComponent, FVector Scale3d = FVector(1, 1, 1), FVector CenterOfScale = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
@@ -222,4 +227,4 @@ public:
 	///										applied to each vertex.
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void RotateAroundAxis(UMeshDeformationComponent *&MeshDeformationComponent, FVector CenterOfRotation = FVector::ZeroVector, FVector Axis = FVector::UpVector, float AngleInDegrees = 0.0f, USelectionSet *Selection = nullptr);
-}
+};
