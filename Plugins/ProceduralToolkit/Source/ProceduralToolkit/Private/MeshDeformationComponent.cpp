@@ -25,6 +25,7 @@ bool UMeshDeformationComponent::LoadFromStaticMesh(UMeshDeformationComponent *&M
 	return success;
 }
 
+
 bool UMeshDeformationComponent::UpdateProceduralMeshComponent(UMeshDeformationComponent *&MeshDeformationComponent, UProceduralMeshComponent *proceduralMeshComponent, bool createCollision)
 {
 	MeshDeformationComponent = this;
@@ -59,7 +60,7 @@ USelectionSet * UMeshDeformationComponent::SelectNear(FVector center /*= FVector
 USelectionSet * UMeshDeformationComponent::SelectFacing(FVector Facing /*= FVector::UpVector*/, float InnerRadiusInDegrees /*= 0*/, float OuterRadiusInDegrees /*= 30.0f*/)
 {
 	if (!meshGeometry) {
-		UE_LOG(LogTemp, Warning, TEXT("Jitter: No meshGeometry loaded"));
+		UE_LOG(LogTemp, Warning, TEXT("SelectFacing: No meshGeometry loaded"));
 		return nullptr;
 	}
 	return meshGeometry->SelectFacing(Facing, InnerRadiusInDegrees, OuterRadiusInDegrees);

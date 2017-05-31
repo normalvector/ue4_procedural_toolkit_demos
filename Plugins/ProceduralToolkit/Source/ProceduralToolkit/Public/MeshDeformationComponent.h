@@ -7,6 +7,38 @@
 #include "MeshDeformationComponent.generated.h"
 
 
+/// *ActorComponent* for easy geometry deformation.
+///
+/// This is the main class for the *Mesh Deformation Component*, and
+/// provides an *ActorComponent* which can be attached to a UE4 Actor to
+/// give access to the feature.
+///
+/// This includes the basic functionality to:
+/// * Load geometry data and store it in the component
+/// * Select vertices
+/// * Apply transformations (Much of this is a delegate
+///   to *MeshGeometry* and just repeated here so that we
+///   can call the function on the component)
+/// * Output the result to a *ProceduralMeshComponent*.
+///
+/// ## Use of SelectionSet to control Weighting
+///
+/// All of the transformation functions can take an optional *SelectionSet*
+/// which allows the strength of the effect to be controlled on a per-vertex
+/// basis, with 0=No effect, 1=Full effect, and values in between meaning partial
+/// effect.  Values less than <0 or >1 can be provided but the effects are not guaranteed
+/// to be sensible.
+///
+/// Each transformation function tries to handle the SelectionSet as a linear interpolation
+/// in a sensible manner, but this can change depending on the nature of the function.
+/// For example *Translate* can treat the weighting as a lerp factor between the points original
+/// position and the translation target, but *Rotate* needs to apply their blending to the actual
+/// angle of rotation.  If in doubt look at the actual implementation for the function in
+/// *MeshGeometry*.
+
+/// \see UActorComponent
+/// \see MeshGeometry
+/// \see SelectionSet
 UCLASS(ClassGroup=(Custom),meta=(BlueprintSpawnableComponent))
 class PROCEDURALTOOLKIT_API UMeshDeformationComponent : public UActorComponent
 {
@@ -19,61 +51,175 @@ public:
 	/// This is the mesh geometry currently stored within the component
 	UPROPERTY(BlueprintReadonly, Category = MeshDeformationComponent)
 		UMeshGeometry *meshGeometry = nullptr;
-
-
-	// Pull out the geometry of the mesh so we're able to modify it
+	
+	/// Loads the geometry from a static mesh
+	/// 
+	/// This stores the geometryin *meshGeometry* and replaces any existing
+	/// geometry.
+	///
+	/// \param MeshDeformationComponent		This component
+	/// \param staticMesh					The mesh to copy the geometry from
+	/// \param LOD							A StaticMesh can have multiple meshes for different levels of detail, this specifies which LOD we're taking the information fromaram>
+	/// \return *True* if we could read the geometry, *False* if not
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		bool LoadFromStaticMesh(UMeshDeformationComponent *&MeshDeformationComponent, UStaticMesh *staticMesh, int32 LOD=0);
+		bool LoadFromStaticMesh(UMeshDeformationComponent *&MeshDeformationComponent, UStaticMesh *staticMesh, int32 LOD = 0);
 
-	// Write out the geometry to a ProceduralMeshComponent.
+	/// Write the current geometry to a *ProceduralMeshComponent*.
+	/// 
+	/// This will rebuild the mesh, completely replacing any geometry it has there.
+	///
+	/// \param MeshDeformationComponent		This component
+	/// \param proceduralMeshComponent		The target *ProceduralMeshComponent
+	/// \param createCollision				Whether to create a collision shape for it
+	/// \return *True* if the update was successful, *False* if not
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		bool UpdateProceduralMeshComponent(UMeshDeformationComponent *&MeshDeformationComponent, UProceduralMeshComponent *proceduralMeshComponent, bool createCollision);
 
-	///// Selection Set utilities
-
-	// Select all vertices
+	/// <summary>
+	/// Selects all of the vertices at full strength.
+	/// </summary>
+	/// <returns>A *SelectionSet* with full strength</returns>
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectAll();
 
-	// Select points near a point in space.
+	/// Selects the vertices near a point in space.
+	///
+	/// This does a smooth linear selection based on distance form the point provided.
+	///
+	/// \param center		The center of the selection in local space
+	/// \param innerRadius	The inner radius, all points inside this will be selected at
+	///								maximum strength
+	/// \param outerRadius	The outer radius, all points outside this will not be selected
+	/// \return A *SelectionSet* for the selected vertices
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectNear(FVector center = FVector::ZeroVector, float innerRadius = 0, float outerRadius = 100);
-
-	// Select vertices with a given normal facing
+	
+	/// Selects vertices with a given normal facing
+	///
+	/// This does a smooth linear selection based on the angle from the specified normal direction.
+	/// \param Facing		The facing to select, in world space
+	/// \param InnerRadiusInDegrees	The inner radius in degrees, all vertices with a normal within
+	///								this deviation from Facing will be selected at full strength.
+	/// \param OuterRadiusInDegrees	The outer radius in degrees, all vertices with a normal greater
+	///								than this deviation from Facing will not be selected.
+	/// \return A *SelectionSet* for the selected vertices
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectFacing(FVector Facing = FVector::UpVector, float InnerRadiusInDegrees = 0, float OuterRadiusInDegrees = 30.0f);
 
-	///// Deformation utilities
+	/// Adds random jitter to the position of the points.
+
+	///  The jitter will be a vector randomly selected
+	///  (with [continuous uniform distribution]() between *Min* and *Max*, and will
+	///  be scaled by each vertex's selection weights if they're provided.
+	///
+	/// \param MeshDeformationComponent		This component.
+	/// \param randomStream					The random stream to source numbers from
+	/// \param min							The minimum jittered offset
+	/// \param max							The maximum jittered offset
+	/// \param selection					The selection weights, if not specified
+	///										then all points will be jittered at
+	///										maximum strength
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Jitter(UMeshDeformationComponent *&MeshDeformationComponent, FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection);
 
+	/// Move all selected by the provided delta vector.
+	///
+	///  If a *SelectionSet* is provided the delta will be weighted according to the vertex's
+	///   selection weight.
+	///
+	/// \param MeshDeformationComponent			This component
+	/// \param delta							The translation delta in local space
+	/// \param selection						The selection weights, if not specified
+	///											then all points will be moved by the
+	///											full delta translation
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Translate(UMeshDeformationComponent *&MeshDeformationComponent, FVector delta, USelectionSet *selection);
 
+	/// Rotates the vertices of the mesh a specified amount round the specified position.
+	/// 
+	/// If a SelectionSet is provided then the actual rotator will be scaled accordingly allowing
+	/// whorls and similar to be easily created.
+	///
+	/// \param MeshDeformationComponent			This component
+	/// \param Rotation							The rotation to apply
+	/// \param CenterOfRotation					The center of rotation in local space
+	/// \param Selection						The selection weights, if not specified
+	///											then all points will be rotated by the full rotation
+	///											specified
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Rotate(UMeshDeformationComponent *&MeshDeformationComponent, FRotator Rotation = FRotator::ZeroRotator, FVector CenterOfRotation = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
-	// Scale the selected points about a specified center
+	/// Scale the selected points on a per-axis basis about a specified center
+	///
+	/// \param MeshDeformationComponent			This component
+	/// \param Scale3d							The per-axis scaling
+	/// \param CenterOfScale					The center of the scaling operation in local space
+	/// \param Selection						The selection weights, if not specified then all
+	///											vertices will be scaled fully by the specifed scale
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Scale(UMeshDeformationComponent *&MeshDeformationComponent, FVector Scale3d = FVector(1, 1, 1), FVector CenterOfScale = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
-	// Applies a transform (Translate/Rotate/Scale) as a single operation.
+	/// Applies Scale/Rotate/Translate as a single operation using a combined transform.
+	///
+	/// The order of the operations will be Scale/Rotate/Translate as documented
+	/// [here](https://docs.unrealengine.com/latest/INT/API/Runtime/Core/Math/FTransform/index.html).
+	///
+	/// \param MeshDeformationComponent		This component
+	/// \param Transform					The transformation to apply
+	/// \param CenterOfTransform			The center of the transformation, in local space
+	/// \param Selection					The SelectionSet, if not specified then all vertices
+	///										will be transformed at full strength
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Transform(UMeshDeformationComponent *&MeshDeformationComponent, FTransform Transform, FVector CenterOfTransform = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
-	// Makes a mesh more like a sphere by scaling along vectors to an adjustable strength.
+	/// Morph a mesh into a sphere by moving points along their normal
+	///
+	/// \param MeshDeformationComponent		This component
+	/// \param SphereRadius					The radius of the sphere to morph to
+	/// \param FilterStrength				The strength of the effect, 0=No effect, 1=Full effect.
+	///	\param SphereCenter					The center of the sphere
+	/// \param Selection					The SelectionSet, if specified this will be multiplied
+	///										by FilterStrength to allow each vertex's morph to be
+	///										individually controlled.
+	/// \todo Should group the sphere parameters together
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Spherize(UMeshDeformationComponent *&MeshDeformationComponent, float SphereRadius = 100.0f, float FilterStrength = 1.0f, FVector SphereCenter = FVector::ZeroVector, USelectionSet *Selection = nullptr);
 
-	// Moves vertices along their own normals
+	/// Moves vertices a specified offset along their own normals
+	///
+	/// \param MeshDeformationComponent			This component
+	/// \param Offset							The distance to offset
+	/// \param Selection						The SelectionSet, with the offset being scaled for
+	///											each vertex
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void Inflate(UMeshDeformationComponent *&MeshDeformationComponent, float Offset = 0.0f, USelectionSet *Selection = nullptr);
 
-	// Scale an object along an arbitrary axis
+	/// Scale an object along an arbitrary axis
+	///
+	/// This allows objects to be scaled along any axis, not just the normal XYZ, and so is more
+	/// flexible than the standard approach, even thought it is less intuitive.
+	///
+	/// \param MeshDeformationComponent			This component
+	/// \param CenterOfScale					The center of the scale operation, in local space
+	/// \param Axis								The axis to scale along
+	/// \param Scale							The ratio to scale by
+	/// \param Selection						The SelectionSet which controls the weighting of the
+	///											scale for each vertex.  If not provided then the scale
+	///											will apply at full strength to all vertices.
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void ScaleAlongAxis(UMeshDeformationComponent *&MeshDeformationComponent, FVector CenterOfScale = FVector::ZeroVector, FVector Axis = FVector::UpVector, float Scale = 1.0f, USelectionSet *Selection = nullptr);
 
-	// Rotate an object around an arbitrary axis
+	/// Rotate vertices about an arbitrary axis
+	///
+	/// This allows more freedom than the standard 'Rotate around X, Y, and Z' and is more flexible
+	/// than the standard approach even if it is less intuitive.
+	///
+	/// \param MeshDeformationComponent		This component
+	/// \param CenterOfRotation				The center of the rotation operation in local space
+	/// \param Axis							The axis to rotate about
+	/// \param AngleInDegrees				The angle to rotate the vertices about
+	/// \param Selection					The SelectionSet which controls the amount of rotation
+	///										applied to each vertex.
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
 		void RotateAroundAxis(UMeshDeformationComponent *&MeshDeformationComponent, FVector CenterOfRotation = FVector::ZeroVector, FVector Axis = FVector::UpVector, float AngleInDegrees = 0.0f, USelectionSet *Selection = nullptr);
 }

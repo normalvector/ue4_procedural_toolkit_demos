@@ -9,6 +9,11 @@
 #include "SelectionSet.h"
 #include "MeshGeometry.generated.h"
 
+/// \todo Select linear - Select based on a position and a linear falloff
+/// \todo Select near line segment - Select based on distance to start/end points
+/// \todo Select near spline - Select based on distance from a SplineComponent
+/// \todo Select by noise function - Select based on the FastNoise library
+
 UCLASS(BlueprintType)
 class PROCEDURALTOOLKIT_API UMeshGeometry : public UObject
 {
@@ -42,8 +47,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		FString GetSummary() const;
 
-	///// Selection Set utilities
-
 	// Select all vertices
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectAll();
@@ -56,13 +59,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectFacing(FVector Facing = FVector::UpVector, float InnerRadiusInDegrees = 0, float OuterRadiusInDegrees = 30.0f);
 
-	// Select linear
-	// Select near line segment
-	// Select near spline
-	// Select by noise function
 
-	///// Deformation utilities
-	
 	// Randomly jitter a point.
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
 		void Jitter(FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection=nullptr);
