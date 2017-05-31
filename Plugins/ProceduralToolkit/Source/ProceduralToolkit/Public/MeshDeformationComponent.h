@@ -8,11 +8,8 @@
 
 
 /// \todo Select linear - Select based on a position and a linear falloff
-/// \todo Select by noise function - Select based on the FastNoise library
 /// \todo Select by vertex color - Both baked into the mesh and painted onto a StaticMeshActor.  Choose channel.  This may need extra work since VertexColor isn't there when we get the data from the mesh.
 /// \todo Select by Texture - Similar to vertex color but using a texture map.
-
-/// \todo Check that FRandomStream is correctly passed
 
 /// *ActorComponent* for easy geometry deformation.
 ///
@@ -182,7 +179,7 @@ public:
 	///										then all points will be jittered at
 	///										maximum strength
 	UFUNCTION(BlueprintCallable, Category = MeshDeformationComponent)
-		void Jitter(UMeshDeformationComponent *&MeshDeformationComponent, FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection);
+		void Jitter(UMeshDeformationComponent *&MeshDeformationComponent, FRandomStream &randomStream, FVector min, FVector max, USelectionSet *selection);
 
 	/// Move all selected by the provided delta vector.
 	///

@@ -261,7 +261,7 @@ USelectionSet * UMeshGeometry::SelectByNoise(
 	return newSelectionSet;
 }
 
-void UMeshGeometry::Jitter(FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection /*=nullptr*/)
+void UMeshGeometry::Jitter(FRandomStream &randomStream, FVector min, FVector max, USelectionSet *selection /*=nullptr*/)
 {
 	// TODO: Check selectionSet size.
 

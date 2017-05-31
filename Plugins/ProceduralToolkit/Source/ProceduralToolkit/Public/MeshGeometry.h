@@ -58,9 +58,7 @@ enum class ECellularReturnType : uint8 {
 	Distance2Div		UMETA(DisplayName = "Distance 2 Div")
 };
 
-/// \todo Check that FRandomStream is correctly passed
 /// \todo Select linear - Select based on a position and a linear falloff
-/// \todo Select by noise function - Select based on the FastNoise library
 
 /// This class stores the geometry for a mesh which can then be mutated by the
 /// methods provided to allow a range of topological deformations.
@@ -229,7 +227,7 @@ public:
 	///										then all points will be jittered at
 	///										maximum strength
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
-		void Jitter(FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection=nullptr);
+		void Jitter(FRandomStream &randomStream, FVector min, FVector max, USelectionSet *selection=nullptr);
 
 	/// Move all selected by the provided delta vector.
 	///
