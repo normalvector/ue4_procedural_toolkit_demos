@@ -12,6 +12,8 @@
 ///
 /// These methods are designed to return modified values of SelectionSets rather than
 /// change the values provided to them.
+///
+/// \todo RemapToRange - Set an absolute min/max and remap based on them, useful for the noise functions
 UCLASS()
 class PROCEDURALTOOLKIT_API USelectionSetBPLibrary : public UBlueprintFunctionLibrary
 {

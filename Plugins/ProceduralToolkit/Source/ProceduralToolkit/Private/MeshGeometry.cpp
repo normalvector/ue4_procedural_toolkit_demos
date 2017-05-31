@@ -5,6 +5,7 @@
 #include "KismetProceduralMeshLibrary.h"
 #include "Runtime/Core/Public/Math/UnrealMathUtility.h" // ClosestPointOnLine/ClosestPointOnInfiniteLine
 #include "SelectionSet.h"
+#include "FastNoise.h"
 #include "MeshGeometry.h"
 
 UMeshGeometry::UMeshGeometry()
@@ -213,6 +214,28 @@ USelectionSet * UMeshGeometry::SelectFacing(FVector Facing /*= FVector::UpVector
 			} else {
 				newSelectionSet->weights.Emplace(0);
 			}
+		}
+	}
+
+	return newSelectionSet;
+}
+
+USelectionSet * UMeshGeometry::SelectByNoise()
+{
+	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
+
+	// TODO: Lots of work here!
+	FastNoise noise;
+
+	// Set the desired noise type.
+	noise.SetNoiseType(FastNoise::SimplexFractal);
+
+	// Iterate over the sections, and the vertices in each section.
+	float noiseValue;
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			noiseValue = noise.GetNoise(vertex.X, vertex.Y, vertex.Z);
+			newSelectionSet->weights.Emplace(noiseValue);
 		}
 	}
 

@@ -12,7 +12,6 @@
 
 /// \todo Check that FRandomStream is correctly passed
 /// \todo Select linear - Select based on a position and a linear falloff
-/// \todo Select near line segment - Select based on distance to start/end points
 /// \todo Select by noise function - Select based on the FastNoise library
 
 /// This class stores the geometry for a mesh which can then be mutated by the
@@ -139,6 +138,13 @@ public:
 	/// \return A *SelectionSet* for the selected vertices
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectFacing(FVector Facing = FVector::UpVector, float InnerRadiusInDegrees = 0, float OuterRadiusInDegrees = 30.0f);
+
+	/// Selects vertices based on a noise function.
+	///
+	/// This uses the [FastNoise](https://github.com/Auburns/FastNoise) noise library by Jordan Pack and released under the MIT license.
+	/// \todo This needs tweaking to support all noise arguments.
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectByNoise();
 
 	/// Adds random jitter to the position of the points.
 	///
