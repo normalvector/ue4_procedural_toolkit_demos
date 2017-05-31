@@ -89,15 +89,25 @@ USelectionSet * UMeshDeformationComponent::SelectFacing(FVector Facing /*= FVect
 }
 
 USelectionSet * UMeshDeformationComponent::SelectByNoise(
-	int32 seed /*= 1337*/,
-	float frequency /*= 0.01*/,
-	ENoiseInterpolation noiseInterpolation /*= ENoiseInterpolation::Quintic*/)
-{
+	int32 Seed /*= 1337*/,
+	float Frequency /*= 0.01*/,
+	ENoiseInterpolation NoiseInterpolation /*= ENoiseInterpolation::Quintic*/,
+	ENoiseType NoiseType /*= ENoiseType::Simplex */,
+	uint8 FractalOctaves /*= 3*/,
+	float FractalLacunarity /*= 2.0*/,
+	float FractalGain /*= 0.5*/,
+	EFractalType FractalType /*= EFractalType::FBM*/,
+	ECellularDistanceFunction CellularDistanceFunction /*= ECellularDistanceFunction::Euclidian*/
+) {
 	if (!meshGeometry) {
 		UE_LOG(LogTemp, Warning, TEXT("SelectByNoise: No meshGeometry loaded"));
 		return nullptr;
 	}
-	return meshGeometry->SelectByNoise(seed, frequency, noiseInterpolation);
+	return meshGeometry->SelectByNoise(
+		Seed, Frequency, NoiseInterpolation, NoiseType,
+		FractalOctaves, FractalLacunarity, FractalGain, FractalType,
+		CellularDistanceFunction
+	);
 }
 
 void UMeshDeformationComponent::Jitter(UMeshDeformationComponent *&MeshDeformationComponent, FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection)

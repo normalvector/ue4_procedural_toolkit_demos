@@ -142,12 +142,30 @@ public:
 	/// Selects vertices based on a noise function.
 	///
 	/// This uses the [FastNoise](https://github.com/Auburns/FastNoise) noise library by Jordan Pack and released under the MIT license.
-	/// \todo This needs tweaking to support all noise arguments.
+	/// Not all of these settings are used by each noise type, details on their application is in the
+	/// [FastNoise docs](https://github.com/Auburns/FastNoise/wiki/Noise-Settings).
+	///
+	/// \param Seed							The seed for the random number generator
+	/// \param Frequency					The frequency of the noise, the higher the value the more detail
+	/// \param NoiseInterpolation			The interpolation used to smooth between noise values
+	/// \param NoiseType					The type of noise we're using
+	/// \param FractalOctaves				The number of fractal octaves to apply
+	/// \param FractalLacunarity			Set the fractal lacunarity, the higher the value the more space the
+	///										the fractal will fill up
+	/// \param FractalGain					The strength of the fractal
+	/// \param FractalType					The type of fractal being used
+	/// \param CellularDistanceFunction		The function used to calculate the value for a given point.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectByNoise(
-			int32 seed = 1337,
-			float frequency = 0.01,
-			ENoiseInterpolation noiseInterpolation = ENoiseInterpolation::Quintic
+			int32 Seed = 1337,
+			float Frequency = 0.01,
+			ENoiseInterpolation NoiseInterpolation = ENoiseInterpolation::Quintic,
+			ENoiseType NoiseType = ENoiseType::Simplex,
+			uint8 FractalOctaves = 3,
+			float FractalLacunarity = 2.0,
+			float FractalGain = 0.5,
+			EFractalType FractalType = EFractalType::FBM,
+			ECellularDistanceFunction CellularDistanceFunction = ECellularDistanceFunction::Euclidian
 		);
 
 	/// Adds random jitter to the position of the points.

@@ -223,7 +223,13 @@ USelectionSet * UMeshGeometry::SelectFacing(FVector Facing /*= FVector::UpVector
 USelectionSet * UMeshGeometry::SelectByNoise(
 	int32 seed /*= 1337*/,
 	float frequency /*= 0.01*/,
-	ENoiseInterpolation noiseInterpolation /*= ENoiseInterpolation::Quintic*/
+	ENoiseInterpolation noiseInterpolation /*= ENoiseInterpolation::Quintic*/,
+	ENoiseType noiseType /*= ENoiseType::Simplex */,
+	uint8 FractalOctaves /*= 3*/,
+	float FractalLacunarity /*= 2.0*/,
+	float FractalGain /*= 0.5*/,
+	EFractalType FractalType /*= EFractalType::FBM*/,
+	ECellularDistanceFunction CellularDistanceFunction /*= ECellularDistanceFunction::Euclidian*/
 ) {
 	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
 
@@ -233,10 +239,15 @@ USelectionSet * UMeshGeometry::SelectByNoise(
 	// Set up all of the noise details from the parameters provided
 	noise.SetSeed(seed);
 	noise.SetFrequency(frequency);
-	noise.SetInterp((FastNoise::Interp) noiseInterpolation);
-
-	// Set the desired noise type.
-	noise.SetNoiseType(FastNoise::SimplexFractal);
+	noise.SetInterp((FastNoise::Interp)noiseInterpolation);
+	noise.SetNoiseType((FastNoise::NoiseType)noiseType);
+	noise.SetFractalOctaves(FractalOctaves);
+	noise.SetFractalLacunarity(FractalLacunarity);
+	noise.SetFractalGain(FractalGain);
+	noise.SetFractalType((FastNoise::FractalType) FractalType);
+	noise.SetCellularDistanceFunction((FastNoise::CellularDistanceFunction) CellularDistanceFunction);
+	/// \todo Is this needed.. ?  FastNoise doesn't seem to have a SetPositionWarpAmp param
+	///noise.SetPositionWarpAmp(PositionWarpAmp);
 
 	// Iterate over the sections, and the vertices in each section.
 	float noiseValue;
