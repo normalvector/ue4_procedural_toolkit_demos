@@ -59,7 +59,6 @@ USelectionSet * UMeshDeformationComponent::SelectNear(FVector center /*= FVector
 
 USelectionSet * UMeshDeformationComponent::SelectNearSpline(USplineComponent *spline, float innerRadius /*= 0*/, float outerRadius /*= 100*/)
 {
-
 	if (!meshGeometry) {
 		UE_LOG(LogTemp, Warning, TEXT("SelectNearSpline: No meshGeometry loaded"));
 		return nullptr;
@@ -68,6 +67,16 @@ USelectionSet * UMeshDeformationComponent::SelectNearSpline(USplineComponent *sp
 	FTransform actorTransform  = this->GetOwner()->GetTransform();
 
 	return meshGeometry->SelectNearSpline(spline, actorTransform, innerRadius, outerRadius);
+}
+
+USelectionSet * UMeshDeformationComponent::SelectNearLine(FVector lineStart, FVector lineEnd, float innerRadius /*=0*/, float outerRadius/*= 100*/, bool lineIsInfinite/* = false */)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("SelectNearLine: No meshGeometry loaded"));
+		return nullptr;
+	}
+
+	return meshGeometry->SelectNearLine(lineStart, lineEnd, innerRadius, outerRadius, lineIsInfinite);
 }
 
 USelectionSet * UMeshDeformationComponent::SelectFacing(FVector Facing /*= FVector::UpVector*/, float InnerRadiusInDegrees /*= 0*/, float OuterRadiusInDegrees /*= 30.0f*/)

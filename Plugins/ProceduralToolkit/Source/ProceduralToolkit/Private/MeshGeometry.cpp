@@ -3,6 +3,7 @@
 #include "ProceduralToolkit.h"
 #include "Engine/StaticMesh.h"
 #include "KismetProceduralMeshLibrary.h"
+#include "Runtime/Core/Public/Math/UnrealMathUtility.h" // ClosestPointOnLine/ClosestPointOnInfiniteLine
 #include "SelectionSet.h"
 #include "MeshGeometry.h"
 
@@ -155,10 +156,37 @@ USelectionSet * UMeshGeometry::SelectNearSpline(USplineComponent *spline, FTrans
 	return newSelectionSet;
 }
 
+USelectionSet * UMeshGeometry::SelectNearLine(FVector lineStart, FVector lineEnd, float innerRadius /*=0*/, float outerRadius/*= 100*/, bool lineIsInfinite/* = false */)
+{
+	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
+
+	// Iterate over the sections, and the vertices in each section.
+	FVector nearestPointOnLine;
+	float distanceToLine;
+	float distanceBias;
+	float selectionRadius = outerRadius - innerRadius;
+
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			// Get the distance from the line based on whether we're looking at an infinite line or not.
+			if (lineIsInfinite) {
+				nearestPointOnLine = FMath::ClosestPointOnInfiniteLine(lineStart, lineEnd, vertex);
+			} else {
+				nearestPointOnLine = FMath::ClosestPointOnLine(lineStart, lineEnd, vertex);
+			}
+			// Apply bias to map distance to 0-1 based on innerRadius and outerRadius
+			distanceToLine = (vertex - nearestPointOnLine).Size();
+			distanceBias = 1.0f - FMath::Clamp((distanceToLine - innerRadius) / selectionRadius, 0.0f, 1.0f);
+			newSelectionSet->weights.Emplace(distanceBias);
+		}
+	}
+
+	return newSelectionSet;
+}
+
 USelectionSet * UMeshGeometry::SelectFacing(FVector Facing /*= FVector::UpVector*/, float InnerRadiusInDegrees /*= 0*/, float OuterRadiusInDegrees /*= 30.0f*/)
 {
 	// TODO: Check geometry looks valid (normals.Num == vertices.Num)
-
 	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
 	
 	// Normalize the facing vector.

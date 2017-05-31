@@ -11,6 +11,7 @@
 /// \todo Select near line segment - Select based on distance to start/end points
 /// \todo Select by noise function - Select based on the FastNoise library
 /// \todo Select by vertex color - Both baked into the mesh and painted onto a StaticMeshActor.  Choose channel.
+/// \todo Select by Texture - Siumilar to vertex color but using a texture map.
 
 /// \todo Check that FRandomStream is correctly passed
 
@@ -102,6 +103,8 @@ public:
 
 	/// Selects the vertices near a Spline, allowing curves to easily guide deformation.
 	///
+	/// This does a smooth linear radial selection based on distance from the spline provided.
+	///
 	/// \param spline		The spline to be used for the selection
 	/// \param innerRadius	The inner radius, all points closer to the spline than this distance
 	///						will be selected at maximum strength.
@@ -109,6 +112,21 @@ public:
 	///						will not be selected
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectNearSpline(USplineComponent *spline, float innerRadius = 0, float outerRadius = 100);
+
+	/// Selects vertices near a line segment with the provided start/end points.
+	///
+	/// This does a smooth linear selection based on the distance from the line points provided.
+	///
+	/// \param lineStart		The position of the start of the line in local space
+	/// \param lineEnd			The position of the end of the line in local spac3e
+	/// \param innerRadius		The inner radius, all points closer to the line segment than this distance
+	///							will be selected at maximum strength
+	/// \param outerRadius		The outer radius, all points further from the line segment than this distance
+	///							will not be selected
+	/// \param lineIsInfinite	If this is checked then lineStart/lineEnd will treated as two points on an
+	///							infinite line instead of being the start/end of a line segment
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
+		USelectionSet *SelectNearLine(FVector lineStart, FVector lineEnd, float innerRadius = 0, float outerRadius = 100, bool lineIsInfinite = false);
 
 	/// Selects vertices with a given normal facing
 	///

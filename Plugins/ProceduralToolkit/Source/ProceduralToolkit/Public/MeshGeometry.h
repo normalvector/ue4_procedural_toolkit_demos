@@ -102,6 +102,8 @@ public:
 
 	/// Selects the vertices near a Spline, allowing curves to easily guide deformation.
 	///
+	/// This does a smooth linear radial selection based on distance from the spline provided.
+	///
 	/// \param spline		The spline to be used for the selection
 	/// \param transform	This is the transform to convert from local->world space and is normally GetOwner()->GetTransform()
 	/// \param innerRadius	The inner radius, all points closer to the spline than this distance
@@ -110,6 +112,21 @@ public:
 	///						will not be selected
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectNearSpline(USplineComponent *spline, FTransform transform, float innerRadius = 0, float outerRadius = 100);
+
+	/// Selects vertices near a line segment with the provided start/end points.
+	///
+	/// This does a smooth linear selection based on the distance from the line points provided.
+	///
+	/// \param lineStart		The position of the start of the line in local space
+	/// \param lineEnd			The position of the end of the line in local spac3e
+	/// \param innerRadius		The inner radius, all points closer to the line segment than this distance
+	///							will be selected at maximum strength
+	/// \param outerRadius		The outer radius, all points further from the line segment than this distance
+	///							will not be selected
+	/// \param lineIsInfinite	If this is checked then lineStart/lineEnd will treated as two points on an
+	///							infinite line instead of being the start/end of a line segment
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectNearLine(FVector lineStart, FVector lineEnd, float innerRadius = 0, float outerRadius = 100, bool lineIsInfinite = false);
 
 	/// Selects vertices with a given normal facing
 	///
