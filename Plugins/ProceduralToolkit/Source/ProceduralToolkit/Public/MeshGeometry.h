@@ -5,6 +5,7 @@
 #include "UObject/NoExportTypes.h"
 #include "SectionGeometry.h"
 #include "Math/TransformNonVectorized.h"
+#include "Runtime/Engine/Classes/Components/SplineComponent.h"
 #include "ProceduralMeshComponent.h"
 #include "SelectionSet.h"
 #include "MeshGeometry.generated.h"
@@ -12,7 +13,6 @@
 /// \todo Check that FRandomStream is correctly passed
 /// \todo Select linear - Select based on a position and a linear falloff
 /// \todo Select near line segment - Select based on distance to start/end points
-/// \todo Select near spline - Select based on distance from a SplineComponent
 /// \todo Select by noise function - Select based on the FastNoise library
 
 /// This class stores the geometry for a mesh which can then be mutated by the
@@ -100,6 +100,16 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectNear(FVector center =FVector::ZeroVector, float innerRadius=0, float outerRadius=100);
 
+	/// Selects the vertices near a Spline, allowing curves to easily guide deformation.
+	///
+	/// \param spline		The spline to be used for the selection
+	/// \param transform	This is the transform to convert from local->world space and is normally GetOwner()->GetTransform()
+	/// \param innerRadius	The inner radius, all points closer to the spline than this distance
+	///						will be selected at maximum strength.
+	/// \param outerRadius	The outer radius, all points further from the spline than this distance
+	///						will not be selected
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectNearSpline(USplineComponent *spline, FTransform transform, float innerRadius = 0, float outerRadius = 100);
 
 	/// Selects vertices with a given normal facing
 	///

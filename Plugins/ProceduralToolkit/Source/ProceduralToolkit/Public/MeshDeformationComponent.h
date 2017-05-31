@@ -9,8 +9,9 @@
 
 /// \todo Select linear - Select based on a position and a linear falloff
 /// \todo Select near line segment - Select based on distance to start/end points
-/// \todo Select near spline - Select based on distance from a SplineComponent
 /// \todo Select by noise function - Select based on the FastNoise library
+/// \todo Select by vertex color - Both baked into the mesh and painted onto a StaticMeshActor.  Choose channel.
+
 /// \todo Check that FRandomStream is correctly passed
 
 /// *ActorComponent* for easy geometry deformation.
@@ -98,7 +99,17 @@ public:
 	/// \return A *SelectionSet* for the selected vertices
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
 		USelectionSet *SelectNear(FVector center = FVector::ZeroVector, float innerRadius = 0, float outerRadius = 100);
-	
+
+	/// Selects the vertices near a Spline, allowing curves to easily guide deformation.
+	///
+	/// \param spline		The spline to be used for the selection
+	/// \param innerRadius	The inner radius, all points closer to the spline than this distance
+	///						will be selected at maximum strength.
+	/// \param outerRadius	The outer radius, all points further from the spline than this distance
+	///						will not be selected
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
+		USelectionSet *SelectNearSpline(USplineComponent *spline, float innerRadius = 0, float outerRadius = 100);
+
 	/// Selects vertices with a given normal facing
 	///
 	/// This does a smooth linear selection based on the angle from the specified normal direction.

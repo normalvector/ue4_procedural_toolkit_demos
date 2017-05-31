@@ -128,6 +128,33 @@ USelectionSet * UMeshGeometry::SelectNear(FVector center /*=FVector::ZeroVector*
 	return newSelectionSet;
 }
 
+USelectionSet * UMeshGeometry::SelectNearSpline(USplineComponent *spline, FTransform transform, float innerRadius /*= 0*/, float outerRadius /*= 100*/)
+{
+	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
+
+	// Iterate over the sections, and the vertices in each section.
+	float distanceFromSpline;
+	float distanceBias;
+	FVector closestPointOnSpline;
+	float selectionRadius = outerRadius - innerRadius;
+
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			// Convert the vertex location to local space- and then get the nearest point on the spline in local space.
+			closestPointOnSpline = spline->FindLocationClosestToWorldLocation(
+				transform.TransformPosition(vertex),
+				ESplineCoordinateSpace::Local
+			);
+			distanceFromSpline = (vertex - closestPointOnSpline).Size();
+			// Apply bias to map distance to 0-1 based on innerRadius and outerRadius
+			distanceBias = 1.0f - FMath::Clamp((distanceFromSpline - innerRadius) / selectionRadius, 0.0f, 1.0f);
+			newSelectionSet->weights.Emplace(distanceBias);
+		}
+	}
+
+	return newSelectionSet;
+}
+
 USelectionSet * UMeshGeometry::SelectFacing(FVector Facing /*= FVector::UpVector*/, float InnerRadiusInDegrees /*= 0*/, float OuterRadiusInDegrees /*= 30.0f*/)
 {
 	// TODO: Check geometry looks valid (normals.Num == vertices.Num)

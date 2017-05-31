@@ -6,17 +6,24 @@
 #include "SelectionSet.h"
 #include "SelectionSetBPLibrary.generated.h"
 
-/**
- * 
- */
+
+/// This is a *BlueprintFunctionLibrary* implementing the Blueprint nodes which are
+/// used to manipulate *SelectionSet* items, including modifying and combining them.
+///
+/// These methods are designed to return modified values of SelectionSets rather than
+/// change the values provided to them.
 UCLASS()
 class PROCEDURALTOOLKIT_API USelectionSetBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 	
 public:
-	// Clamp (SelectionSet)
-	UFUNCTION(BlueprintPure, 
+	/// Clamp all values in the set to the minimum and maximum provided.
+	///
+	/// \param Min		The minimum value to clamp to
+	/// \param Max		The maximum value to clamp to
+	/// \return			The clamped SelectionSet.
+	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "Clamp (SelectionSet)", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Clamp(USelectionSet *Value, float Min=0, float Max=1);
