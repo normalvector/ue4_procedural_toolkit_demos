@@ -367,3 +367,6 @@ __pycache__/
 # UE4 Plugin stuff
 **/Binaries/
 **/Intermediate/
+
+# Doxygen
+Plugins/ProceduralToolkit/doc/
