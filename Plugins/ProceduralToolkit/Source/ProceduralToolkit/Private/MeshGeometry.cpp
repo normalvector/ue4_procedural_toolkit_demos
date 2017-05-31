@@ -220,12 +220,20 @@ USelectionSet * UMeshGeometry::SelectFacing(FVector Facing /*= FVector::UpVector
 	return newSelectionSet;
 }
 
-USelectionSet * UMeshGeometry::SelectByNoise()
-{
+USelectionSet * UMeshGeometry::SelectByNoise(
+	int32 seed /*= 1337*/,
+	float frequency /*= 0.01*/,
+	ENoiseInterpolation noiseInterpolation /*= ENoiseInterpolation::Quintic*/
+) {
 	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
 
 	// TODO: Lots of work here!
 	FastNoise noise;
+
+	// Set up all of the noise details from the parameters provided
+	noise.SetSeed(seed);
+	noise.SetFrequency(frequency);
+	noise.SetInterp((FastNoise::Interp) noiseInterpolation);
 
 	// Set the desired noise type.
 	noise.SetNoiseType(FastNoise::SimplexFractal);

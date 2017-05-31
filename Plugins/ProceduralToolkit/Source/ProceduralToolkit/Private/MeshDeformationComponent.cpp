@@ -88,13 +88,16 @@ USelectionSet * UMeshDeformationComponent::SelectFacing(FVector Facing /*= FVect
 	return meshGeometry->SelectFacing(Facing, InnerRadiusInDegrees, OuterRadiusInDegrees);
 }
 
-USelectionSet * UMeshDeformationComponent::SelectByNoise()
+USelectionSet * UMeshDeformationComponent::SelectByNoise(
+	int32 seed /*= 1337*/,
+	float frequency /*= 0.01*/,
+	ENoiseInterpolation noiseInterpolation /*= ENoiseInterpolation::Quintic*/)
 {
 	if (!meshGeometry) {
 		UE_LOG(LogTemp, Warning, TEXT("SelectByNoise: No meshGeometry loaded"));
 		return nullptr;
 	}
-	return meshGeometry->SelectByNoise();
+	return meshGeometry->SelectByNoise(seed, frequency, noiseInterpolation);
 }
 
 void UMeshDeformationComponent::Jitter(UMeshDeformationComponent *&MeshDeformationComponent, FRandomStream randomStream, FVector min, FVector max, USelectionSet *selection)

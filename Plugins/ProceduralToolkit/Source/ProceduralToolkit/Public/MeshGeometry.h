@@ -8,7 +8,17 @@
 #include "Runtime/Engine/Classes/Components/SplineComponent.h"
 #include "ProceduralMeshComponent.h"
 #include "SelectionSet.h"
+#include "FastNoise.h"
 #include "MeshGeometry.generated.h"
+
+
+UENUM(BlueprintType)
+enum class ENoiseInterpolation : uint8
+{
+	Linear = 1 UMETA(DisplayName = "Linear"),
+	Hermite = 2 UMETA(DisplayName = "Hermite"),
+	Quintic = 3 UMETA(DisplayName = "Quintic")
+};
 
 /// \todo Check that FRandomStream is correctly passed
 /// \todo Select linear - Select based on a position and a linear falloff
@@ -144,7 +154,11 @@ public:
 	/// This uses the [FastNoise](https://github.com/Auburns/FastNoise) noise library by Jordan Pack and released under the MIT license.
 	/// \todo This needs tweaking to support all noise arguments.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
-		USelectionSet *SelectByNoise();
+		USelectionSet *SelectByNoise(
+			int32 seed = 1337,
+			float frequency = 0.01,
+			ENoiseInterpolation noiseInterpolation = ENoiseInterpolation::Quintic
+		);
 
 	/// Adds random jitter to the position of the points.
 	///

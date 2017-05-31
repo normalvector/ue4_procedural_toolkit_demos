@@ -144,7 +144,11 @@ public:
 	/// This uses the [FastNoise](https://github.com/Auburns/FastNoise) noise library by Jordan Pack and released under the MIT license.
 	/// \todo This needs tweaking to support all noise arguments.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshDeformationComponent)
-		USelectionSet *SelectByNoise();
+		USelectionSet *SelectByNoise(
+			int32 seed = 1337,
+			float frequency = 0.01,
+			ENoiseInterpolation noiseInterpolation = ENoiseInterpolation::Quintic
+		);
 
 	/// Adds random jitter to the position of the points.
 	///
