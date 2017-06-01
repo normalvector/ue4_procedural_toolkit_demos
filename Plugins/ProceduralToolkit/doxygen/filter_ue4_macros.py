@@ -1,11 +1,38 @@
 #!env python3
-import fileinput;
-import re;
+import fileinput
+import getopt
+import os
+import re
+import sys
 
-is_ue4_macro = re.compile('^\s*(UCLASS|UPROPERTY|UFUNCTION)')
-for line in fileinput.input():
+# This is from https://stackoverflow.com/questions/5454322/python-how-to-match-nested-parentheses-with-regex
+def paren_matcher (n):
+    # poor man's matched paren scanning, gives up
+    # after n+1 levels.  Matches any string with balanced
+    # parens inside; add the outer parens yourself if needed.
+    # Nongreedy.
+    return r"[^()]*?(?:\("*n+r"[^()]*?"+r"\)[^()]*?)*?"*n
 
-    if is_ue4_macro.match(line):
-        print ("");
-    else:
-        print(line, end='')
+# Check we have the right number of args
+if (len(sys.argv) != 2):
+    print("Usage: filter_ue4_macros <C++ Filename>", file=sys.stderr)
+    os._exit(1)
+
+# Get the filename from args
+filename = sys.argv[1]
+
+# Slurp file into a single string
+file = open(filename, 'r')
+if file.closed:
+    print("Cannot read file", file=sys.stderr)
+    os._exit(1)
+content = file.read()
+
+# Do a regular expression to replace all UE4 macros, include balanced params
+# TODO: Remove C++ comments!
+regex = '^(\s*)((?:UFUNCTION|UCLASS|UPROPERTY)\s*\('+paren_matcher(25)+'\))'
+
+content = re.sub(regex, r'\1/* UE4 Macro: \2 */', content, flags=re.MULTILINE)
+
+# Output the content
+print(content, end='')
