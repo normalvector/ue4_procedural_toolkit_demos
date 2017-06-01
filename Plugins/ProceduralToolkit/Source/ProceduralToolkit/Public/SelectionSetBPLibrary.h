@@ -14,13 +14,14 @@
 /// change the values provided to them.
 ///
 /// \todo RemapToRange - Set an absolute min/max and remap based on them, useful for the noise functions
+/// \todo RemapToCurve - Remap round a value curve.
 UCLASS()
 class PROCEDURALTOOLKIT_API USelectionSetBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 	
 public:
-	/// Clamp all values in the set to the minimum and maximum provided.
+	/// Clamp all values i7n the set to the minimum and maximum provided.
 	///
 	/// \param Min		The minimum value to clamp to
 	/// \param Max		The maximum value to clamp to
@@ -152,4 +153,10 @@ public:
 		meta = (DisplayName = "Lerp (SelectionSet, Float)", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Lerp_SelectionSetWithFloat(USelectionSet *A, float B, float Alpha = 0);
+
+	// RemapToCurve(SelectionSet, Curve)
+	UFUNCTION(BlueprintPure,
+		meta = (DisplayName = "RemapToCurve (SelectionSet, Curve)", Category = "Math|SelectionSet")
+	)
+		static USelectionSet *Remap_SelectionSetToCurve(USelectionSet *Value, UCurveFloat *Curve);
 };

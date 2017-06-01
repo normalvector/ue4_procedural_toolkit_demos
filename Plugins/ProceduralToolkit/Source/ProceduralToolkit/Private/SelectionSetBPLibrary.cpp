@@ -415,3 +415,33 @@ USelectionSet * USelectionSetBPLibrary::Lerp_SelectionSetWithFloat(USelectionSet
 
 	return result;
 }
+
+USelectionSet * USelectionSetBPLibrary::Remap_SelectionSetToCurve(USelectionSet *Value, UCurveFloat *Curve)
+{
+	// Need a SelectionSet
+	if (!Value) {
+		return nullptr;
+	}
+
+	// Need a Curve
+	if (!Curve) {
+		return nullptr;
+	}
+
+	// Get the time limits of the curve- we'll scale by the end
+	float CurveTimeStart, CurveTimeEnd;
+	Curve->GetTimeRange(CurveTimeStart, CurveTimeEnd);
+	UE_LOG(LogTemp, Log, TEXT("Curve: %f - %f"), CurveTimeStart, CurveTimeEnd);
+
+	// Create the results at the correct size and zero it.
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	auto size = Value->weights.Num();
+	result->weights.SetNumZeroed(size);
+
+	// Apply the curve mapping
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = Curve->GetFloatValue(Value->weights[i] * CurveTimeEnd);
+	}
+
+	return result;
+}

@@ -120,6 +120,15 @@ USelectionSet * UMeshDeformationComponent::SelectByTexture(UTexture2D *Texture2D
 	return meshGeometry->SelectByTexture(Texture2D, TextureChannel);
 }
 
+USelectionSet * UMeshDeformationComponent::SelectLinear(FVector LineStart, FVector LineEnd, bool Reverse /*= false*/, bool LimitToLine /*= false*/)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("Jitter: No meshGeometry loaded"));
+		return nullptr;
+	}
+	return meshGeometry->SelectLinear(LineStart, LineEnd, Reverse, LimitToLine);
+}
+
 void UMeshDeformationComponent::Jitter(UMeshDeformationComponent *&MeshDeformationComponent, FRandomStream &randomStream, FVector min, FVector max, USelectionSet *selection)
 {
 	MeshDeformationComponent = this;

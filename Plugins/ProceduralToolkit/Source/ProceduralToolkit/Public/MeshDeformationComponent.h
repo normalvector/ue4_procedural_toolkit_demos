@@ -172,6 +172,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectByTexture(UTexture2D *Texture2D, ETextureChannel TextureChannel = ETextureChannel::Red);
 
+	/// Select vertices linearly between two points.
+	///
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectLinear(FVector LineStart, FVector LineEnd, bool Reverse = false, bool LimitToLine = false);
+
 	/// Adds random jitter to the position of the points.
 	///
 	///  The jitter will be a vector randomly selected

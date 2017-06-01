@@ -331,6 +331,50 @@ USelectionSet * UMeshGeometry::SelectByTexture(UTexture2D *Texture2D, ETextureCh
 	return newSelectionSet;
 }
 
+USelectionSet * UMeshGeometry::SelectLinear(FVector LineStart, FVector LineEnd, bool Reverse /*= false*/, bool LimitToLine /*= false*/)
+{
+
+	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
+
+	// Do the reverse if needed..
+	if (Reverse) {
+		FVector TmpVector = LineStart;
+		LineStart = LineEnd;
+		LineEnd = TmpVector;
+	}
+
+	// Calculate the length of the line.
+	float LineLength = (LineEnd - LineStart).Size();
+	if (LineLength < 0.1) {
+		// Lines too close..
+		/// \todo Log error message..
+		return nullptr;
+	}
+
+	// Iterate over the sections, and the vertices in each section
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			// Get the nearest point on the line
+			FVector NearestPointOnLine = FMath::ClosestPointOnLine(LineStart, LineEnd, vertex);
+
+			// If we've hit one of the end points then return the limits
+			if (NearestPointOnLine == LineEnd) {
+				newSelectionSet->weights.Emplace(LimitToLine ? 0.0f : 1.0f);
+			}
+			else if (NearestPointOnLine == LineStart) {
+				newSelectionSet->weights.Emplace(0.0f);
+			}
+			else {
+				// Get the distance to the two start point- it's the ratio we're after.
+				float DistanceToLineStart = (NearestPointOnLine - LineStart).Size();
+				newSelectionSet->weights.Emplace(DistanceToLineStart / LineLength);
+			}
+		}
+	}
+
+	return newSelectionSet;
+}
+
 void UMeshGeometry::Jitter(FRandomStream &randomStream, FVector min, FVector max, USelectionSet *selection /*=nullptr*/)
 {
 	// TODO: Check selectionSet size.
@@ -338,20 +382,20 @@ void UMeshGeometry::Jitter(FRandomStream &randomStream, FVector min, FVector max
 	// Iterate over the sections, and the the vertices in the sections.
 	int32 nextSelectionIndex = 0;
 	FVector randomJitter;
-		// Iterate over the sections, and the vertices in each section.
-		for (auto &section : this->sections) {
-			for (auto &vertex : section.vertices) {
-				randomJitter = FVector(
-					randomStream.FRandRange(min.X, max.X),
-					randomStream.FRandRange(min.Y, max.Y),
-					randomStream.FRandRange(min.Z, max.Z)
-				);
-				vertex = FMath::Lerp(
-					vertex,
-					vertex + randomJitter,
-					selection ? selection->weights[nextSelectionIndex++] : 1.0f
-				);
-			}
+	// Iterate over the sections, and the vertices in each section.
+	for (auto &section : this->sections) {
+		for (auto &vertex : section.vertices) {
+			randomJitter = FVector(
+				randomStream.FRandRange(min.X, max.X),
+				randomStream.FRandRange(min.Y, max.Y),
+				randomStream.FRandRange(min.Z, max.Z)
+			);
+			vertex = FMath::Lerp(
+				vertex,
+				vertex + randomJitter,
+				selection ? selection->weights[nextSelectionIndex++] : 1.0f
+			);
+		}
 	}
 }
 
