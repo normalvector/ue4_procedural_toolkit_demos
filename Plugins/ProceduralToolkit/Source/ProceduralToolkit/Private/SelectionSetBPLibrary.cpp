@@ -445,3 +445,40 @@ USelectionSet * USelectionSetBPLibrary::Remap_SelectionSetToCurve(USelectionSet 
 
 	return result;
 }
+
+USelectionSet * USelectionSetBPLibrary::Remap_Range(USelectionSet *Value, float Min /*= 0.0f*/, float Max /*= 1.0f*/)
+{
+	// Need a SelectionSet, and it needs at least one value.
+	if (!Value) {
+		return nullptr;
+	}
+	int32 size = Value->weights.Num();
+	if (size == 0) {
+		return nullptr;
+	}
+
+	// Find the current minimum and maximum.
+	float CurrentMinimum = Value->weights[0];
+	float CurrentMaximum = Value->weights[0];
+	for (int32 i = 1; i < size; i++) {
+		CurrentMinimum = FMath::Min(CurrentMinimum, Value->weights[i]);
+		CurrentMaximum = FMath::Max(CurrentMaximum, Value->weights[i]);
+	}
+
+	// Create the results at the correct size and zero it.
+	USelectionSet *result = NewObject<USelectionSet>(Value->GetOuter());
+	result->weights.SetNumZeroed(size);
+
+	// Check if all values are the same- if so just return a flat result equal to Min.
+	if (CurrentMinimum == CurrentMaximum) {
+		return Set(result, Min);
+	}
+
+	// Perform the remapping
+	float Scale = (Max-Min) / (CurrentMaximum - CurrentMinimum);
+	for (int32 i = 0; i < size; i++) {
+		result->weights[i] = (Value->weights[i] - CurrentMinimum) * Scale + Min;
+	}
+
+	return result;
+}

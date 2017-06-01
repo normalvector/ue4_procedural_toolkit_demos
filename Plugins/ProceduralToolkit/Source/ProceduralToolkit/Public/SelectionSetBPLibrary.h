@@ -14,7 +14,6 @@
 /// change the values provided to them.
 ///
 /// \todo RemapToRange - Set an absolute min/max and remap based on them, useful for the noise functions
-/// \todo RemapToCurve - Remap round a value curve.
 UCLASS()
 class PROCEDURALTOOLKIT_API USelectionSetBPLibrary : public UBlueprintFunctionLibrary
 {
@@ -159,4 +158,10 @@ public:
 		meta = (DisplayName = "RemapToCurve (SelectionSet, Curve)", Category = "Math|SelectionSet")
 	)
 		static USelectionSet *Remap_SelectionSetToCurve(USelectionSet *Value, UCurveFloat *Curve);
+
+	// RemapToRange(SelectionSet, float, float)
+	UFUNCTION(BlueprintPure,
+		meta = (DisplayName = "RemapToRange (SelectionSet, float, float)", Category = "Math|SelectionSet")
+	)
+		static USelectionSet *Remap_Range(USelectionSet *Value, float Min = 0.0f, float Max = 1.0f);
 };
