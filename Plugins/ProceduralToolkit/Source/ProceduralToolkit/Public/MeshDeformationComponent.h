@@ -165,6 +165,13 @@ public:
 			ECellularDistanceFunction CellularDistanceFunction = ECellularDistanceFunction::Euclidian
 		);
 
+	/// Select vertices from a texture.
+	///
+	/// Black in the channel = Unselected, White = Fully selected.  Uses UV0 for texture access as that's
+	/// what GetSectionFromStaticMesh makes available to us.
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectByTexture(UTexture2D *Texture2D, ETextureChannel TextureChannel = ETextureChannel::Red);
+
 	/// Adds random jitter to the position of the points.
 	///
 	///  The jitter will be a vector randomly selected

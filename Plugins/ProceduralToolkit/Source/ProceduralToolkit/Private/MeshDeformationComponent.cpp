@@ -16,6 +16,7 @@ UMeshDeformationComponent::UMeshDeformationComponent()
 
 bool UMeshDeformationComponent::LoadFromStaticMesh(UMeshDeformationComponent *&MeshDeformationComponent, UStaticMesh *staticMesh, int32 LOD /*= 0*/)
 {
+	/// \todo Err.. ?  Should this be here?  Have I broken the API?
 	MeshDeformationComponent = this;
 	meshGeometry = NewObject<UMeshGeometry>(this);
 	bool success = meshGeometry->LoadFromStaticMesh(staticMesh);
@@ -108,6 +109,15 @@ USelectionSet * UMeshDeformationComponent::SelectByNoise(
 		FractalOctaves, FractalLacunarity, FractalGain, FractalType,
 		CellularDistanceFunction
 	);
+}
+
+USelectionSet * UMeshDeformationComponent::SelectByTexture(UTexture2D *Texture2D, ETextureChannel TextureChannel /*= ETextureChannel::Red*/)
+{
+	if (!meshGeometry) {
+		UE_LOG(LogTemp, Warning, TEXT("SelectByTexture: No meshGeometry loaded"));
+		return nullptr;
+	}
+	return meshGeometry->SelectByTexture(Texture2D, TextureChannel);
 }
 
 void UMeshDeformationComponent::Jitter(UMeshDeformationComponent *&MeshDeformationComponent, FRandomStream &randomStream, FVector min, FVector max, USelectionSet *selection)

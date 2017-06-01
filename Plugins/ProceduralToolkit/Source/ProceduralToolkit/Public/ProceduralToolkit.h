@@ -6,6 +6,8 @@
 
 /// The interface for loading and unloading the toolkit
 /// \todo Think about renaming the whole thing to a smaller-scoped name
+/// \todo Think about putting all BP functions in a global category, "Mesh Deformer|Subcategory"
+
 class FProceduralToolkitModule : public IModuleInterface
 {
 public:

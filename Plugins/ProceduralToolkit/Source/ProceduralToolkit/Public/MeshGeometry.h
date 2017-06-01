@@ -11,6 +11,7 @@
 #include "FastNoise.h"
 #include "MeshGeometry.generated.h"
 
+/// A copy of FastNoise's Interp enum made available to Blueprint.
 UENUM(BlueprintType)
 enum class ENoiseInterpolation : uint8 {
 	Linear		UMETA(DisplayName = "Linear"),
@@ -18,6 +19,7 @@ enum class ENoiseInterpolation : uint8 {
 	Quintic		UMETA(DisplayName = "Quintic")
 };
 
+/// A copy of FastNoise's NoiseType enum made available to Blueprint.
 UENUM(BlueprintType)
 enum class ENoiseType : uint8 {
 	Value			UMETA(DisplayName = "Value"),
@@ -32,6 +34,7 @@ enum class ENoiseType : uint8 {
 	CubicFractal	UMETA(DisplayName = "Cubic Fractal")
 };
 
+/// A copy of FastNoise's FractalType enum made available to Blueprint.
 UENUM(BlueprintType)
 enum class EFractalType : uint8 {
 	FBM					UMETA(DisplayName = "FBM"),
@@ -39,6 +42,7 @@ enum class EFractalType : uint8 {
 	RigidMulti			UMETA(DisplayName = "Rigid Multi")
 };
 
+/// A copy of FastNoise's CellularDistanceFunction enum made available to Blueprint.
 UENUM(BlueprintType)
 enum class ECellularDistanceFunction : uint8 {
 	Euclidian			UMETA(DisplayName = "Euclidian"),
@@ -46,10 +50,12 @@ enum class ECellularDistanceFunction : uint8 {
 	Natural				UMETA(DisplayName = "Natural")
 };
 
+/// A copy of FastNoise's CellularReturnType enum made available to Blueprint.
 UENUM(BlueprintType)
 enum class ECellularReturnType : uint8 {
 	CellValue			UMETA(DisplayName = "Cell Value"),
-	/// \todo NoiseLookup			UMETA(DisplayName = "Noise Lookup"), - This needs extra noise functions
+	/// \todo NoiseLookup is complex and so should ber removed - but needs to be here to allow casting
+	NoiseLookup			UMETA(DisplayName = "Noise Lookup"),
 	Distance			UMETA(DisplayName = "Distance"),
 	Distance2			UMETA(DisplayName = "Distance 2"),
 	Distance2Add		UMETA(DisplayName = "Distance 2 Add"),
@@ -58,7 +64,19 @@ enum class ECellularReturnType : uint8 {
 	Distance2Div		UMETA(DisplayName = "Distance 2 Div")
 };
 
+/// Allow selection of which channel should be used when accessing a texture.
+UENUM(BlueprintType)
+enum class ETextureChannel : uint8 {
+	Red					UMETA(DisplayName = "Red"),
+	Green				UMETA(DisplayName = "Green"),
+	Blue				UMETA(DisplayName = "Blue"),
+	Alpha				UMETA(DisplayName = "Alpha")
+};
+
 /// \todo Select linear - Select based on a position and a linear falloff
+/// \todo Select From Texture - Select the vertices based on a texture accessed from the UV.
+/// \todo Think ahead to other procedural tools - Should the "Select" functions be renamed SelectVerts?
+/// \todo Should Selects return nullptr or empty array?  (Should return nullptr and the further bits should check SelectionSet)
 
 /// This class stores the geometry for a mesh which can then be mutated by the
 /// methods provided to allow a range of topological deformations.
@@ -213,6 +231,13 @@ public:
 			EFractalType FractalType = EFractalType::FBM,
 			ECellularDistanceFunction CellularDistanceFunction = ECellularDistanceFunction::Euclidian
 		);
+
+	/// Select vertices from a texture.
+	///
+	/// Black in the channel = Unselected, White = Fully selected.  Uses UV0 for texture access as that's
+	/// what GetSectionFromStaticMesh makes available to us.
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
+		USelectionSet *SelectByTexture(UTexture2D *Texture2D, ETextureChannel TextureChannel = ETextureChannel::Red);
 
 	/// Adds random jitter to the position of the points.
 	///

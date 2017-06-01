@@ -261,6 +261,76 @@ USelectionSet * UMeshGeometry::SelectByNoise(
 	return newSelectionSet;
 }
 
+USelectionSet * UMeshGeometry::SelectByTexture(UTexture2D *Texture2D, ETextureChannel TextureChannel /*=ETextureChannel::Red*/)
+{
+	USelectionSet *newSelectionSet = NewObject<USelectionSet>(this);
+
+	// Check we have a texture and that it's in the right format
+	if (!Texture2D) {
+		return nullptr;
+	}
+
+	/// \todo Log a message when we do this...
+	Texture2D->SRGB = false;
+	Texture2D->CompressionSettings = TC_VectorDisplacementmap;
+	Texture2D->UpdateResource();
+
+	// Get the raw color data from the texture
+	FTexture2DMipMap *MipMap0 = &Texture2D->PlatformData->Mips[0];
+	int32 textureWidth = MipMap0->SizeX;
+	int32 textureHeight = MipMap0->SizeY;
+	FByteBulkData *BulkData = &MipMap0->BulkData;
+	UE_LOG(LogTemp, Log, TEXT("Texture res: %d x %d"), textureWidth, textureHeight);
+
+	// Check we got the data and lock it
+	if (!BulkData) {
+		/// \todo Log an error..
+		return nullptr;
+	}
+	FColor *colorArray = static_cast<FColor*>(BulkData->Lock(LOCK_READ_ONLY));
+
+	// Iterate over the sections, and the vertices in each section.
+	for (auto &section : this->sections) {
+		for (auto &uv : section.uvs) {
+			// Convert our UV to a texture index.
+			int32 textureX = (int32)FMath::RoundHalfFromZero(uv.X * textureWidth);
+			int32 textureY = (int32)FMath::RoundHalfFromZero(uv.Y * textureHeight);
+
+			/// \todo Wrap/Clamp
+			textureX = FMath::Clamp(textureX, 0, textureWidth-1);
+			textureY = FMath::Clamp(textureY, 0, textureHeight-1);
+
+			// Get the color and access the correct channel.
+			int32 index = (textureY * textureWidth) + textureX;
+			//UE_LOG(LogTemp, Log, TEXT("UV %f,%f = %d,%d (%d)"), uv.X, uv.Y, textureX, textureY, index);
+			
+			FLinearColor color = colorArray[index];
+			//UE_LOG(LogTemp, Log, TEXT("Color %f,%f,%f / %f"), color.R, color.G, color.B, color.A);
+			
+			switch (TextureChannel) {
+			case ETextureChannel::Red:
+				newSelectionSet->weights.Emplace(color.R);
+				break;
+			case ETextureChannel::Green:
+				newSelectionSet->weights.Emplace(color.G);
+				break;
+			case ETextureChannel::Blue:
+				newSelectionSet->weights.Emplace(color.B);
+				break;
+			case ETextureChannel::Alpha:
+				newSelectionSet->weights.Emplace(color.A);
+				break;
+			}
+			//newSelectionSet->weights.Emplace(0);
+		}
+	}
+
+	// Unlock the texture data
+	BulkData->Unlock();
+
+	return newSelectionSet;
+}
+
 void UMeshGeometry::Jitter(FRandomStream &randomStream, FVector min, FVector max, USelectionSet *selection /*=nullptr*/)
 {
 	// TODO: Check selectionSet size.
