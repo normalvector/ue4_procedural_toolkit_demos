@@ -85,6 +85,13 @@ enum class ETextureChannel : uint8 {
 /// geometry backend for *MeshDeformationComponent*.
 ///
 /// \see MeshDeformationComponent
+///
+/// \todo Copy/cache MeshGeometry - allows us to do part of it and go back
+/// \todo Lerp - Blend between two MeshGeometrys
+/// \todo SplineLerp - Lerps along a spline where the binormals drive the spline tangents and normals drive the spline
+///                    direction.
+
+
 UCLASS(BlueprintType)
 class PROCEDURALTOOLKIT_API UMeshGeometry : public UObject
 {

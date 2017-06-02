@@ -13,6 +13,11 @@
 ///
 /// The *SelectionSetBPLibrary* contains a lot of helper functions for this which allow
 /// selection sets to be modified.
+///
+/// \todo Add a Type enum to allow SelectionSets to be used for more than just vertices.
+/// \todo Add a method to check the type/weight count so that we can check if a SelectionSet
+///       can be used
+
 UCLASS(BlueprintType)
 class PROCEDURALTOOLKIT_API USelectionSet : public UObject
 {
