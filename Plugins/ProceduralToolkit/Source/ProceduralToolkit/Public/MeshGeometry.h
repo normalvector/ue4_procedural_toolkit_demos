@@ -90,7 +90,10 @@ enum class ETextureChannel : uint8 {
 /// \todo Lerp - Blend between two MeshGeometrys
 /// \todo SplineLerp - Lerps along a spline where the binormals drive the spline tangents and normals drive the spline
 ///                    direction.
-
+/// \todo Output to Static Mesh - Allow the system to write to a static mesh while running in the editor
+/// \todo Read from PMC - Allow the system to use a PMC as a source of geometry
+/// \todo Read from OBJ - Read in an obj text file
+/// \todo Write to OBJ - Output an obj text file
 
 UCLASS(BlueprintType)
 class PROCEDURALTOOLKIT_API UMeshGeometry : public UObject
@@ -228,10 +231,10 @@ public:
 	/// \param CellularDistanceFunction		The function used to calculate the value for a given point.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectByNoise(
-			int32 seed = 1337,
-			float frequency = 0.01,
-			ENoiseInterpolation noiseInterpolation = ENoiseInterpolation::Quintic,
-			ENoiseType noiseType = ENoiseType::Simplex,
+			int32 Seed = 1337,
+			float Frequency = 0.01,
+			ENoiseInterpolation NoiseInterpolation = ENoiseInterpolation::Quintic,
+			ENoiseType NoiseType = ENoiseType::Simplex,
 			uint8 FractalOctaves = 3,
 			float FractalLacunarity = 2.0,
 			float FractalGain = 0.5,
@@ -246,6 +249,7 @@ public:
 	///
 	/// \param Texture2D					The texture object to sample
 	/// \param TextureChannel				Which channel (RGBA) of the texture to use
+	/// \return The SelectionSet for the texture channel
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = MeshGeometry)
 		USelectionSet *SelectByTexture(UTexture2D *Texture2D, ETextureChannel TextureChannel = ETextureChannel::Red);
 

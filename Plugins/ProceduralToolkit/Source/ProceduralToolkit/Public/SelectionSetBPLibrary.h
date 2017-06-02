@@ -22,6 +22,7 @@ class PROCEDURALTOOLKIT_API USelectionSetBPLibrary : public UBlueprintFunctionLi
 public:
 	/// **Math|SelectionSet|Clamp (SelectionSet)**: Clamp all values i7n the set to the minimum and maximum provided.
 	///
+	/// \param Value	The SelectionSet to clamp
 	/// \param Min		The minimum value to clamp to
 	/// \param Max		The maximum value to clamp to
 	/// \return			The clamped SelectionSet.
@@ -40,7 +41,7 @@ public:
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "Ease (SelectionSet)", Category = "Math|SelectionSet")
 	)
-		static USelectionSet *Ease(USelectionSet *Value, EEasingFunc::Type easeFunction = EEasingFunc::Linear, int32 steps = 2, float blendExp = 2.0f);
+		static USelectionSet *Ease(USelectionSet *Value, EEasingFunc::Type EaseFunction = EEasingFunc::Linear, int32 Steps = 2, float BlendExp = 2.0f);
 	
 	/// **Math|SelectionSet|SelectionSet + SelectionSet**: Add two SelectionSets together
 	///
@@ -121,8 +122,8 @@ public:
 
 	/// **Math|SelectionSet|SelectionSet / SelectionSet**: Divides the values from one SelectionSet by those of another
 	///
-	/// \param A			The SelectionSet to divide (*A*/B)
-	/// \param B			The SelectionSet to divide by (A/*B*)
+	/// \param A			The SelectionSet to divide
+	/// \param B			The SelectionSet to divide by
 	/// \return				A SelectionSet with the values of A/B
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "SelectionSet / SelectionSet", CompactNodeTitle = "/",
@@ -132,9 +133,9 @@ public:
 
 	/// **Math|SelectionSet|SelectionSet / Float**: Divides the values from a SelectionSet by a Float
 	///
-	/// \param A			The SelectionSet to divide (*A*/B)
-	/// \param B			The Float to divide by (A/*B*)
-	/// \return				A SelectionSet with the values of A/B
+	/// \param Value			The SelectionSet to divide (*A*/B)
+	/// \param Float			The Float to divide by (A/*B*)
+	/// \return				A SelectionSet with the values of Value/Float
 	UFUNCTION(BlueprintPure,
 		meta = (DisplayName = "SelectionSet / Float", CompactNodeTitle = "/",
 			Keywords = "/ divide division", Category = "Math|SelectionSet")

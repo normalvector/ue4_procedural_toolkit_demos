@@ -221,10 +221,10 @@ USelectionSet * UMeshGeometry::SelectFacing(FVector Facing /*= FVector::UpVector
 }
 
 USelectionSet * UMeshGeometry::SelectByNoise(
-	int32 seed /*= 1337*/,
-	float frequency /*= 0.01*/,
-	ENoiseInterpolation noiseInterpolation /*= ENoiseInterpolation::Quintic*/,
-	ENoiseType noiseType /*= ENoiseType::Simplex */,
+	int32 Seed /*= 1337*/,
+	float Frequency /*= 0.01*/,
+	ENoiseInterpolation NoiseInterpolation /*= ENoiseInterpolation::Quintic*/,
+	ENoiseType NoiseType /*= ENoiseType::Simplex */,
 	uint8 FractalOctaves /*= 3*/,
 	float FractalLacunarity /*= 2.0*/,
 	float FractalGain /*= 0.5*/,
@@ -237,10 +237,10 @@ USelectionSet * UMeshGeometry::SelectByNoise(
 	FastNoise noise;
 
 	// Set up all of the noise details from the parameters provided
-	noise.SetSeed(seed);
-	noise.SetFrequency(frequency);
-	noise.SetInterp((FastNoise::Interp)noiseInterpolation);
-	noise.SetNoiseType((FastNoise::NoiseType)noiseType);
+	noise.SetSeed(Seed);
+	noise.SetFrequency(Frequency);
+	noise.SetInterp((FastNoise::Interp)NoiseInterpolation);
+	noise.SetNoiseType((FastNoise::NoiseType)NoiseType);
 	noise.SetFractalOctaves(FractalOctaves);
 	noise.SetFractalLacunarity(FractalLacunarity);
 	noise.SetFractalGain(FractalGain);
@@ -250,11 +250,11 @@ USelectionSet * UMeshGeometry::SelectByNoise(
 	///noise.SetPositionWarpAmp(PositionWarpAmp);
 
 	// Iterate over the sections, and the vertices in each section.
-	float noiseValue;
+	float NoiseValue;
 	for (auto &section : this->sections) {
 		for (auto &vertex : section.vertices) {
-			noiseValue = noise.GetNoise(vertex.X, vertex.Y, vertex.Z);
-			newSelectionSet->weights.Emplace(noiseValue);
+			NoiseValue = noise.GetNoise(vertex.X, vertex.Y, vertex.Z);
+			newSelectionSet->weights.Emplace(NoiseValue);
 		}
 	}
 

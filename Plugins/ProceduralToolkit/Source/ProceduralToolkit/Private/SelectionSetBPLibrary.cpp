@@ -24,7 +24,7 @@ USelectionSet * USelectionSetBPLibrary::Clamp(USelectionSet *Value, float Min/*=
 	return result;
 }
 
-USelectionSet * USelectionSetBPLibrary::Ease(USelectionSet *Value, EEasingFunc::Type easeFunction /*= EEasingFunc::Linear*/, int32 steps /*= 2*/, float blendExp /*= 2.0f*/)
+USelectionSet * USelectionSetBPLibrary::Ease(USelectionSet *Value, EEasingFunc::Type EaseFunction /*= EEasingFunc::Linear*/, int32 Steps /*= 2*/, float BlendExp /*= 2.0f*/)
 {
 	// Need a SelectionSet
 	if (!Value) {
@@ -37,10 +37,10 @@ USelectionSet * USelectionSetBPLibrary::Ease(USelectionSet *Value, EEasingFunc::
 	
 	// TODO: This can be more efficient with lambdas.
 	for (int32 i = 0; i < size; i++) {
-		switch (easeFunction)
+		switch (EaseFunction)
 		{
 		case EEasingFunc::Step:
-			result->weights[i] = FMath::InterpStep<float>(0.f, 1.f, Value->weights[i], steps);
+			result->weights[i] = FMath::InterpStep<float>(0.f, 1.f, Value->weights[i], Steps);
 			break;
 		case EEasingFunc::SinusoidalIn:
 			result->weights[i] = FMath::InterpSinIn<float>(0.f, 1.f, Value->weights[i]);
@@ -52,13 +52,13 @@ USelectionSet * USelectionSetBPLibrary::Ease(USelectionSet *Value, EEasingFunc::
 			result->weights[i] = FMath::InterpSinInOut<float>(0.f, 1.f, Value->weights[i]);
 			break;
 		case EEasingFunc::EaseIn:
-			result->weights[i] = FMath::InterpEaseIn<float>(0.f, 1.f, Value->weights[i], blendExp);
+			result->weights[i] = FMath::InterpEaseIn<float>(0.f, 1.f, Value->weights[i], BlendExp);
 			break;
 		case EEasingFunc::EaseOut:
-			result->weights[i] = FMath::InterpEaseOut<float>(0.f, 1.f, Value->weights[i], blendExp);
+			result->weights[i] = FMath::InterpEaseOut<float>(0.f, 1.f, Value->weights[i], BlendExp);
 			break;
 		case EEasingFunc::EaseInOut:
-			result->weights[i] = FMath::InterpEaseInOut<float>(0.f, 1.f, Value->weights[i], blendExp);
+			result->weights[i] = FMath::InterpEaseInOut<float>(0.f, 1.f, Value->weights[i], BlendExp);
 			break;
 		case EEasingFunc::ExpoIn:
 			result->weights[i] = FMath::InterpExpoIn<float>(0.f, 1.f, Value->weights[i]);
