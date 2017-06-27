@@ -535,7 +535,7 @@ void UMeshGeometry::RotateAroundAxis(FVector CenterOfRotation /*= FVector::ZeroV
 		return;
 	}
 
-	// Iterate over the sections, and the the vertices in the sections.
+	// Iterate over the sections, and the vertices in the sections.
 	int32 nextSelectionIndex = 0;
 	for (auto &section : this->sections) {
 		for (auto &vertex : section.vertices) {
@@ -547,6 +547,57 @@ void UMeshGeometry::RotateAroundAxis(FVector CenterOfRotation /*= FVector::ZeroV
 			);
 			FVector rotatedOffset = offsetFromClosestPoint.RotateAngleAxis(scaledRotation, normalizedAxis);
 			vertex = closestPointOnLine + rotatedOffset;
+		}
+	}
+}
+
+void UMeshGeometry::Lerp(UMeshGeometry *TargetMeshGeometry, float Alpha /*= 0.0f*/, USelectionSet *Selection /*= nullptr*/) {
+	// TODO: Check SelectionSet size
+
+	// Iterate over the sections, and the vertices in the sections.  Do it by index so we
+	// can access the same data from TargetMeshGeometry
+	int32 nextSelectionIndex = 0;
+
+	if (!TargetMeshGeometry) {
+		UE_LOG(LogTemp, Error, TEXT("Lerp: No TargetMeshGeometry"));
+		return;
+	}
+	if (this->sections.Num() != TargetMeshGeometry->sections.Num()) {
+		UE_LOG(
+			LogTemp, Error, TEXT("Lerp: Cannot lerp geometries with different numbers of sections, %d compared to %d"),
+			this->sections.Num(), TargetMeshGeometry->sections.Num()
+		);
+		return;
+	}
+
+	for (int32 sectionIndex = 0; sectionIndex < this->sections.Num(); sectionIndex++) {
+		UE_LOG(
+			LogTemp, Error, TEXT("Lerp: SECTION INDEX %d"),
+			sectionIndex
+		);
+
+		if (this->sections[sectionIndex].vertices.Num() != TargetMeshGeometry->sections[sectionIndex].vertices.Num()) {
+			UE_LOG(
+				LogTemp, Error, TEXT("Lerp: Cannot lerp geometries with different numbers of vertices, %d compared to %d for section %d"),
+				this->sections[sectionIndex].vertices.Num(), TargetMeshGeometry->sections[sectionIndex].vertices.Num(), sectionIndex
+			);
+			return;
+		}
+
+		for (int32 vertexIndex = 0; vertexIndex < this->sections[sectionIndex].vertices.Num(); ++vertexIndex) {
+			// Get the existing data from the two components.
+			FVector vertexFromThis = this->sections[sectionIndex].vertices[vertexIndex];
+			FVector vertexFromTarget = TargetMeshGeometry->sections[sectionIndex].vertices[vertexIndex];
+
+			UE_LOG(
+				LogTemp, Error, TEXT("Lerp: Vertex index %d"),
+				vertexIndex
+			);
+			// TODO: World/local logic should live here.
+			this->sections[sectionIndex].vertices[vertexIndex] = FMath::Lerp(
+				vertexFromThis, vertexFromTarget,
+				Alpha * (Selection ? Selection->weights[nextSelectionIndex++] : 1.0f)
+			);
 		}
 	}
 }

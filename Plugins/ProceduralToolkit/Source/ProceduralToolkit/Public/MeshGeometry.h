@@ -365,4 +365,18 @@ public:
 	///										applied to each vertex.
 	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
 		void RotateAroundAxis(FVector CenterOfRotation = FVector::ZeroVector, FVector Axis = FVector::UpVector, float AngleInDegrees = 0.0f, USelectionSet *Selection = nullptr);
+
+	/// Does a linear interpolate with another MeshGeometry object, storing the result in this MeshGeometry.
+	///
+	/// The lerp is just applied in local space so may not be perfect with a lot of models.  This will only apply
+	/// to the vertex positions and so while it will handle different topologies it will keep the triangle data
+	/// from this rather than do anything clever.
+	///
+	/// \todo Allow this to work in either local or world space.
+	///
+	/// \param TargetMeshGeometry			The geometry to blend with
+	/// \param Alpha						The alpha of the blend, 0=Return this Mesh
+	/// \param Selection					The SelectionSet which controls the blend between the two MeshGeometry items
+	UFUNCTION(BlueprintCallable, Category = MeshGeometry)
+		void Lerp(UMeshGeometry *TargetMeshGeometry, float Alpha = 0.0, USelectionSet *Selection = nullptr);
 };
