@@ -426,6 +426,11 @@ Blends two SelectionSets together with a straight alpha blend, so Alpha=0 won't 
 | Alpha | In | The blend factor between the two |
 | Return | Out | The blended result |
 
+### TODO (Features):
+* Deform to spline
+* Deform to terrain (Floor waffle)
+* Output to Static Mesh
+
 ### TODO (SelectionSet):
 * Auto-levels node
 * 'Ripple' node
