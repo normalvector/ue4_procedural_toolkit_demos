@@ -1,3 +1,5 @@
+# **IMPORTANT!:** This repo is now no longer being used.  Now I have a better idea of what this plugin will allow it's been renamed, tidied, and moved to [ue4_mesh_deformation_toolkit](https://github.com/normalvector/ue4_mesh_deformation_toolkit).  I'll leave this repo here until that one has all the demo content this repo had, but that's where all the shiny new stuff will be appearing.
+
 # UE4 Procedural Toolkit
 This is a library for generating procedural content inside UE4.
 
